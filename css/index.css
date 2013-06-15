@@ -1,0 +1,97 @@
+body {
+	background-image:url("../images/ow-grass.jpg");
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+
+div.title_bar {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	background-color:#1C1C1C;
+	color:#FFFFFF;
+	width:640px;
+	height:80px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.main_padding {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	background: #585858;
+	width: 610px;
+	height: 1010px;
+	margin-right: auto;
+	margin-left: auto;
+	position:relative;
+	top: 5px;
+}
+img.logo {
+	position:relative;
+	left: -250px;
+	top: -50px;
+	width: 200px;
+	height: 300px;
+}
+
+div.main_content {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	background-color: #BDBDBD;
+	color: #000000;
+	width: 600px;
+	height: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: 5px;
+}
+
+div.image_box {
+	margin: 10px;
+	padding: 0px;
+	border: 0px;
+	width: 700px;
+	height: 200px;
+	position: relative;
+	top: 10px;
+	margin-right: auto;
+	margin-left: auto;
+	height: 100px;
+	text-align: center;
+	background-color: #585858;
+	color: #FFFFFF;
+}
+
+div.share_box {
+	margin: 10px;
+	padding: 0px;
+	border: 0px;
+	position: relative;
+	top: 30px;
+}
+}
+
+table {
+	table-layout: fixed;
+	position: relative;
+	left: 20px;
+	top: 0px;
+}
+
+td {
+	width: 100px;
+	height: 70px;
+	overflow: hidden;
+	background-color: #2E2E2E;
+	text-align: center;
+}

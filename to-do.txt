@@ -1,0 +1,8 @@
+1) Add javascript to check when window reaches a certain minimum size and then force an x scroll bar (should help with mobile compatability etc).
+2) Replace background image with a higher quality image including grass, ow! disc and a pair of cleats.
+3) Replace Shoddy table title bar with nicely drawn buttons. Could be acheived with HTML5 canvas tags + javascript.
+4) link the twitter/facebook feed into the main page.
+5) add image rotation in image box.
+
+
+?) add form to allow players to create own player profile (is this something that can be abused easily?)

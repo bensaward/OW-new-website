@@ -16,10 +16,12 @@ div.title_bar {
 	border: 0px;
 	background-color:#1C1C1C;
 	color:#FFFFFF;
-	width:640px;
-	height:80px;
-	margin-left: auto;
-	margin-right: auto;
+	width:152px;
+	height:540px; /* change to 80*number of table rows */
+ position: absolute;
+ top: 420px;
+ left: 10px;
+
 }
 
 div.main_padding {
@@ -27,19 +29,20 @@ div.main_padding {
 	padding: 0px;
 	border: 0px;
 	background: #585858;
-	width: 610px;
+	width: 740px;
 	height: 1010px;
 	margin-right: auto;
 	margin-left: auto;
 	position:relative;
-	top: 5px;
+	top: 0px;
+  left: 200px;
 }
 img.logo {
-	position:relative;
-	left: -250px;
-	top: -50px;
-	width: 200px;
-	height: 300px;
+	position:absolute;
+	left: 10px;
+	top: 10px;
+	width: 300px;
+	height: 400px;
 }
 
 div.main_content {
@@ -48,7 +51,7 @@ div.main_content {
 	border: 0px;
 	background-color: #BDBDBD;
 	color: #000000;
-	width: 600px;
+	width: 730px;
 	height: 1000px;
 	margin-left: auto;
 	margin-right: auto;
@@ -56,17 +59,25 @@ div.main_content {
 	top: 5px;
 }
 
+.main-iframe {
+ margin: 0px;
+ padding: 0px;
+ border: 0px;
+ width: 730px;
+ height: 1000px;
+}
+
 div.image_box {
-	margin: 10px;
+	margin: 5px;
 	padding: 0px;
 	border: 0px;
-	width: 700px;
-	height: 200px;
+	width: 730px;
+	height: 400px;
 	position: relative;
-	top: 10px;
+	top: -5px;
+ left: 200px;
 	margin-right: auto;
 	margin-left: auto;
-	height: 100px;
 	text-align: center;
 	background-color: #585858;
 	color: #FFFFFF;
@@ -89,7 +100,7 @@ table {
 }
 
 td {
-	width: 100px;
+	width: 180px;
 	height: 70px;
 	overflow: hidden;
 	background-color: #2E2E2E;

@@ -1,0 +1,143 @@
+body
+{
+    background-image: url('../images/website-bg.png');
+    background-repeat: repeat-y;
+    background-size: cover;
+    background-position: top left;
+    background-attachment: fixed;
+}
+
+div.main_body
+{
+    width: 900px;
+    height: 1000px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #424242;
+}
+
+div.title_head
+{
+    width: 100%;
+    height: 90px;
+    position: absolute;
+    top: 0px;
+    text-align: center;
+    font-size: larger;
+    color: #848484;
+    background-color: rgb(4, 9, 58);
+}
+
+div.sport_name
+{
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 80%;
+    text-align: center;
+    font-size: medium;
+    color: #848484;
+    background-color: rgb(4, 9, 58);
+}
+
+div.spacer1
+{
+    width: 100%;
+    height: 10px;
+    position: relative;
+    top: 90px;
+    background-color: #000000;
+}
+
+#menu_bar
+{
+    width: 100%;
+    height: 36px;
+    background-color: #0B0B61;
+    position: absolute;
+    top: 100px;
+}
+
+#menu_bar table tr td a
+{
+    padding: 10px 45px 30px 10px;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+table
+{
+    table-layout: fixed;
+    background-color: #000000;
+    position: absolute;
+    margin-left: 195px;
+    height: 30px;
+}
+
+td
+{
+    height: 30px;
+    background-color: #0B0B61;
+    text-align: center;
+    overflow: hidden;
+    width: auto;
+    font-size: medium;
+    color: #FFFFFF;
+}
+
+img.logo
+{
+    height: 240px;
+    width: 200px;
+    position: relative;
+    left: -25px;
+    top: -10px;
+    z-index: 1;
+}
+
+div.image_box
+{
+    position: absolute;
+    top: 136px;
+    width: 100%;
+    height: 600px;
+}
+
+img.cover_img
+{
+    width: 100%;
+    height: auto;
+}
+
+div.spacer2
+{
+    width: 100%;
+    height: 10px;
+    background-color: #000000;
+    position: absolute;
+    top: 438px;
+}
+
+div.content
+{
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 448px;
+}
+
+div.content-left
+{
+		width: 45%;
+		position: relative;
+      left: 2.5%;
+}
+
+#border-left
+{
+        width: 400px;
+        height: 600px;
+        position: relative;
+        left: 0px;
+}

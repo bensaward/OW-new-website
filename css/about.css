@@ -1,3 +1,10 @@
+p h1 h2 h3 h4 h5 a
+{
+    opacity: 1;
+    color: #000000;
+    text-decoration: none;
+}
+
 body
 {
     background-image: url('../images/website-bg.png');
@@ -10,11 +17,11 @@ body
 div.main_body
 {
     width: 900px;
-    height: 1000px;
+    height: 2000px;
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    background-color: #424242;
+    opacity: 0.9;
 }
 
 div.title_head
@@ -129,15 +136,60 @@ div.content
 
 div.content-left
 {
-		width: 45%;
-		position: relative;
-      left: 2.5%;
+    width: 45%;
+    position: relative;
+    left: 2.5%;
 }
 
 #border-left
 {
-        width: 400px;
-        height: 600px;
-        position: relative;
-        left: 0px;
+    opacity: 1;
+    position: relative;
+    left: 0px;
+    top: 20px;
+}
+
+#inner-left
+{
+    width: 350px;
+    height: 500px;
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    text-align: left;
+    font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype", Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
+    color: #848484;
+}
+
+#inner-left p a
+{
+    text-decoration: none;
+    color: #848484;
+}
+
+div.content-right
+{
+    position: absolute;
+    width: 45%;
+    left: 52.5%;
+    top: 0px;
+}
+
+#border-right
+{
+    position: absolute;
+    left: 0px;
+    top: 20px;
+}
+
+#inner-right
+{
+    width: 350px;
+    height: 900px;
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    text-align: left;
+    color: #848484;
+    font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype", Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
 }

@@ -12,7 +12,7 @@ function drawRoundedRectangle(canvasID, x, y, width, height, color_hex) // x and
         ctx.lineTo(x+width-50, y+height);
         ctx.arc(x+width-50, y+height-50, 50, 0.5*Math.PI, 0, true);
         ctx.lineTo(x+width, y+50);
-        ctx.arc(x+width-50, y+50, 0, 1.5*Math.PI, true);
+        ctx.arc(x+width-50, y+50, 50, 0, 1.5*Math.PI, true);
         ctx.lineTo(x+50, y);
         ctx.closePath();
         

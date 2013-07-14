@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/about.css" type="text/css">
     <meta charset="utf-8">
     <title>OW! - About</title>
+    <script type="application/x-javascript" src="js/drawing_functions.js"></script>
 </head>
 
 <body>
@@ -54,7 +55,9 @@
     <div class="content">
 	<div class="content-left">
 	    <canvas id="border-left" height="600px" width="450px"></canvas>
-	    <script src="js/border-left.js"></script>
+	    <script>
+		drawRoundedRectangle('border-left', 0, 0, 400, 500, '0B004F');
+	    </script>
 	    <div id="inner-left">
 		<u><h2>Who are you?</h2></u>
 		<p>We are an Ultimate Frisbee team with 2 Open (OW! 1 and OW! 2) teams, a woman's team (WOW!) and a mixed team (COW!) all of whom represent the University of Oxford.</p>
@@ -65,10 +68,15 @@
 	</div>
 	<div class="content-right">
 	    <canvas id="border-right" height="1000px" width="450px"></canvas>
-	    <script src="js/border-right.js"></script>
+	    <script>
+		drawRoundedRectangle('border-right', 0, 0, 400, 1000, '848484');
+	    </script>
 	    <div id="inner-right">
 		<u><h2>What is Ultimate?</h2></u>
 		<p>Ultimate (shortened from "Ultimate Frisbee" because of trademarks) is an exciting, non-contact team sport, played by hundreds of thousands of athletes the world over. It mixes the best features of sports such as Football, Basketball, American Football and Netball into an elegantly simple yet fascinating and demanding game. To compete at the top level, Ultimate players require an unmatched degree of speed, stamina and agility.</p>
+		<img class="whatisultimate" src="images/whatisultimate.jpg">
+		<p>Ultimate is played by two teams of 7 players.Players cannot run with the disc. When you get the disc you must come to a stop and try to throw it to another player (a bit like netball). By passing from player to player, the offence attempts to work the disc up the pitch towards the endzone they are attacking. If the disc hits the ground or is intercepted or knocked down by the other team, then the opposition takes possession (a change of possession is called a "turnover", like American Football). Possession also changes if a receiver is outside the playing area when he or she catches it.</p>
+		<p>The defending team attempts to stop the team with the disc from making progress upfield by marking them (as in soccer or basketball). The theory is that the offence won't want to pass to a player who is being marked closely, as it's likely to result in an interception. So it boils down to the offence players trying to get free of their markers to receive a pass, while the defence makes every effort to stay with them in the hope of forcing a turnover.</p>
 	    </div>
 	</div>
     </div>

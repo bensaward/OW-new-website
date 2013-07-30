@@ -31,3 +31,8 @@ function drawRoundedRectangle(canvasID, x, y, width, height, color_hex) // x and
         ctx.stroke();
     }
 }
+
+function drawEdges()
+{
+    
+}

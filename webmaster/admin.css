@@ -1,0 +1,27 @@
+.center_content
+{
+    width: 300px;
+    position: relative;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+input
+{
+    width: 275px;
+    display: block;
+    height: 25px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+}
+
+#button
+{
+    width: 100px;
+    height: 30px;
+    margin: auto;
+}
+
+h1
+{
+    text-align: center;
+}

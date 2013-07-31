@@ -2,12 +2,12 @@
 
 use warnings;
 use strict;
-use CGI;
-use DBI();
 
-my $query = new CGI();
-my $dbh = DBI->connect("DBI:mysql:database=name;host=localhost", "user", "pass", {'RaiseError' => 1}); #change to webserver DB credentials
 my $random = int(rand(100000000))+10000; #change as see fit... should be a semi cryptographically secure number
+
+open(SNONCE_FILE, '>server_challenge.txt');
+print SNONCE_FILE $random;
+close SNONCE_FILE;
 
 print "content-type: text/html\n\n";
 print <<HTML;

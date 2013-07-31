@@ -22,22 +22,24 @@ d[e>>>5]|=128<<24-e%32;d[(e+64>>>9<<4)+14]=h.floor(b/4294967296);d[(e+64>>>9<<4)
 
 function hash(form)
 {
-    var user=form.username.value;
-    var pass=form.passwd.value;
-    var snonce=form.servernonce.value;
-    var cnonce=Math.floor((Math.random()*1000000)+1); //need to send this back to the server
-    var b=cnonce.toString();
-    var c=snonce.toString();
+    var user=form.username.value,
+    pass=form.passwd.value,
+    snonce=form.servernonce.value,
+    cnonce=Math.floor((Math.random()*1000000)+1), //need to send this back to the server
+    b=cnonce.toString(),
+    c=snonce.toString(),
     
     /*
      * Our algorithm is SHA256(SHA256(pass), cnonce, snonce)
      * where SHA256(pass), cnonce, snonce is a coencatenation of the 3 vars
      */
     
-    var first_hash=CryptoJS.SHA256(pass);
-    var a=first_hash.toString();
-    var str=a+b+c;
-    var hash=CryptoJS.SHA256(str);
+    first_hash=CryptoJS.SHA256(pass),
+    a=first_hash.toString(),
+    str=a+b+c,
+    hash=CryptoJS.SHA256(str),
+    data="uname="+user+"&hash="+hash+"&nonce="+b;
     
-    xmlhttp.open("GET","../cgi-bin/login.cgi?user="+user+"&hash="+hash)
+    xmlhttp.open("POST","../cgi-bin/login.cgi", true);
+    xmlhttp.send(data);
 }

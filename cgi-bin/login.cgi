@@ -16,7 +16,7 @@ my $TABLENAME='';
 
 ### END CONFIG ###
 
-### Errors ###
+### subs ###
 sub incorrect
 {
     
@@ -34,7 +34,29 @@ sub incorrect
     </html>
     Error
 }
-### END ERRORS ###
+
+sub throw_auth
+{
+    my $gen = int(rand(10000))+1000;
+    my $snonce = int(rand(100))+10;
+    my $mod = 6551;
+    my $s_result = ($gen ** $snonce) % $mod;
+    print <<'    DH';
+    context: text/html;
+    
+    <!DOCTYPE html>
+    <head>
+        <title>Redirecting...</title>
+        <script src="../js/crypto.js" type="application/x-javascript"></script>
+    </head>
+    <body>
+        <script>
+            DH_key_exchange($mod, $gen, $s_result)
+        </script>
+    </body>
+    DH
+}
+### END subs ###
 
 #Collect the client's results
 my $query = CGI->new;
@@ -52,8 +74,10 @@ while (@data=$db_query->fetchrow_array())
 {
     $hash = $data[0];
 }
+$db_query->close;
 if ($db_query->rows == 0)
 {
+    $db_query->close;
     incorrect();
 }
 

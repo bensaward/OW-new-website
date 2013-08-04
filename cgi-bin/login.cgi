@@ -5,6 +5,7 @@ use warnings;
 use CGI;
 use DBI();
 use Digest::SHA qw(sha256_hex);
+use Time::localtime;
 
 ### CONFIG ###
 
@@ -37,10 +38,16 @@ sub incorrect
 
 sub throw_auth
 {
-    my $gen = int(rand(10000))+1000;
-    my $snonce = int(rand(100))+10;
+    my $gen = 23;
+    my $snonce = int(rand(10000))+1000;
     my $mod = 6551;
     my $s_result = ($gen ** $snonce) % $mod;
+    my $session_ID = int(rand(10000))+10;
+    
+    open(dh_key_file, ">>dh_key_file.txt");
+    print dh_key_file "ID=$session_ID  secret=$snonce mod=$mod";
+    close dh_key_file;
+    
     print <<'    DH';
     context: text/html;
     
@@ -67,7 +74,7 @@ my $cnonce = $query->param('nonce');
 #Collect the SHA256 hash from the DB
 my $hash;
 my @data;
-my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1}); #change to webserver DB credentials
+my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
 my $db_query = $dbh->prepare('SELECT hash FROM $TABLENAME WHERE user = ?');
 $db_query->execute($username);
 while (@data=$db_query->fetchrow_array())

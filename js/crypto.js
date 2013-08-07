@@ -18,13 +18,6 @@ d)).finalize(c)}}});var w=f.algo={};return f}(Math);
 c[d+n]|0;else{var r=a[n-15],g=a[n-2];a[n]=((r<<25|r>>>7)^(r<<14|r>>>18)^r>>>3)+a[n-7]+((g<<15|g>>>17)^(g<<13|g>>>19)^g>>>10)+a[n-16]}r=l+((p<<26|p>>>6)^(p<<21|p>>>11)^(p<<7|p>>>25))+(p&j^~p&k)+q[n]+a[n];g=((e<<30|e>>>2)^(e<<19|e>>>13)^(e<<10|e>>>22))+(e&f^e&m^f&m);l=k;k=j;j=p;p=h+r|0;h=m;m=f;f=e;e=r+g|0}b[0]=b[0]+e|0;b[1]=b[1]+f|0;b[2]=b[2]+m|0;b[3]=b[3]+h|0;b[4]=b[4]+p|0;b[5]=b[5]+j|0;b[6]=b[6]+k|0;b[7]=b[7]+l|0},_doFinalize:function(){var a=this._data,d=a.words,b=8*this._nDataBytes,e=8*a.sigBytes;
 d[e>>>5]|=128<<24-e%32;d[(e+64>>>9<<4)+14]=h.floor(b/4294967296);d[(e+64>>>9<<4)+15]=b;a.sigBytes=4*d.length;this._process();return this._hash},clone:function(){var a=g.clone.call(this);a._hash=this._hash.clone();return a}});s.SHA256=g._createHelper(f);s.HmacSHA256=g._createHmacHelper(f)})(Math);
 
-/*
-CryptoJS v3.1.2
-code.google.com/p/crypto-js
-(c) 2009-2013 by Jeff Mott. All rights reserved.
-code.google.com/p/crypto-js/wiki/License
-*/
-
 // https://code.google.com/p/crypto-js/#AES
 
 var CryptoJS=CryptoJS||function(u,p){var d={},l=d.lib={},s=function(){},t=l.Base={extend:function(a){s.prototype=this;var c=new s;a&&c.mixIn(a);c.hasOwnProperty("init")||(c.init=function(){c.$super.init.apply(this,arguments)});c.init.prototype=c;c.$super=this;return c},create:function(){var a=this.extend();a.init.apply(a,arguments);return a},init:function(){},mixIn:function(a){for(var c in a)a.hasOwnProperty(c)&&(this[c]=a[c]);a.hasOwnProperty("toString")&&(this.toString=a.toString)},clone:function(){return this.init.prototype.extend(this)}},
@@ -57,8 +50,12 @@ b.keySize,b.ivSize);l.iv=d.iv;b=a.encrypt.call(this,b,c,d.key,l);b.mixIn(d);retu
 8&255]]^n[l[k&255]]},encryptBlock:function(a,b){this._doCryptBlock(a,b,this._keySchedule,t,r,w,v,l)},decryptBlock:function(a,c){var d=a[c+1];a[c+1]=a[c+3];a[c+3]=d;this._doCryptBlock(a,c,this._invKeySchedule,b,x,q,n,s);d=a[c+1];a[c+1]=a[c+3];a[c+3]=d},_doCryptBlock:function(a,b,c,d,e,j,l,f){for(var m=this._nRounds,g=a[b]^c[0],h=a[b+1]^c[1],k=a[b+2]^c[2],n=a[b+3]^c[3],p=4,r=1;r<m;r++)var q=d[g>>>24]^e[h>>>16&255]^j[k>>>8&255]^l[n&255]^c[p++],s=d[h>>>24]^e[k>>>16&255]^j[n>>>8&255]^l[g&255]^c[p++],t=
 d[k>>>24]^e[n>>>16&255]^j[g>>>8&255]^l[h&255]^c[p++],n=d[n>>>24]^e[g>>>16&255]^j[h>>>8&255]^l[k&255]^c[p++],g=q,h=s,k=t;q=(f[g>>>24]<<24|f[h>>>16&255]<<16|f[k>>>8&255]<<8|f[n&255])^c[p++];s=(f[h>>>24]<<24|f[k>>>16&255]<<16|f[n>>>8&255]<<8|f[g&255])^c[p++];t=(f[k>>>24]<<24|f[n>>>16&255]<<16|f[g>>>8&255]<<8|f[h&255])^c[p++];n=(f[n>>>24]<<24|f[g>>>16&255]<<16|f[h>>>8&255]<<8|f[k&255])^c[p++];a[b]=q;a[b+1]=s;a[b+2]=t;a[b+3]=n},keySize:8});u.AES=p._createHelper(d)})();
 
+// https://code.google.com/p/crypto-js/#Block_Modes_and_Padding
+CryptoJS.mode.CFB=function(){function g(c,b,e,a){var d=this._iv;d?(d=d.slice(0),this._iv=void 0):d=this._prevBlock;a.encryptBlock(d,0);for(a=0;a<e;a++)c[b+a]^=d[a]}var f=CryptoJS.lib.BlockCipherMode.extend();f.Encryptor=f.extend({processBlock:function(c,b){var e=this._cipher,a=e.blockSize;g.call(this,c,b,a,e);this._prevBlock=c.slice(b,b+a)}});f.Decryptor=f.extend({processBlock:function(c,b){var e=this._cipher,a=e.blockSize,d=c.slice(b,b+a);g.call(this,c,b,a,e);this._prevBlock=d}});return f}();
+CryptoJS.pad.AnsiX923={pad:function(a,d){var b=a.sigBytes,c=4*d,c=c-b%c,b=b+c-1;a.clamp();a.words[b>>>2]|=c<<24-8*(b%4);a.sigBytes+=c},unpad:function(a){a.sigBytes-=a.words[a.sigBytes-1>>>2]&255}};
+CryptoJS.pad.ZeroPadding={pad:function(a,c){var b=4*c;a.clamp();a.sigBytes+=b-(a.sigBytes%b||b)},unpad:function(a){for(var c=a.words,b=a.sigBytes-1;!(c[b>>>2]>>>24-8*(b%4)&255);)b--;a.sigBytes=b+1}};
 
-// crypto.js implimented by Ben Saward
+//implimented by Ben Saward
 
 var xmlhttp=new XMLHttpRequest();
 
@@ -86,7 +83,7 @@ function hash(form)
     xmlhttp.send(data);
 }
 
-function DH_key_exchange(mod, generator, s_result)
+function DH_key_exchange(mod, generator, s_result, session)
 {
     var cnonce=Math.floor((Math.random()*100)+1), //Calculate preliminary result
     client_result=(generator ^ cnonce) % mod;
@@ -101,9 +98,9 @@ function DH_key_exchange(mod, generator, s_result)
     
     
     xmlhttp.open("post", "../cgi-bin/DH_key_exchange", true);
-    xmlhttp.send("client_result="+client_result);
+    xmlhttp.send("client_result="+client_result+"session_ID="+session);
 }
 
-function decrypt_and_store (name, ) {
+function decrypt_and_store (name) {
     //code
 }

@@ -58,7 +58,7 @@ sub throw_auth
     </head>
     <body>
         <script>
-            DH_key_exchange($mod, $gen, $s_result)
+            DH_key_exchange($mod, $gen, $s_result, $session_ID)
         </script>
     </body>
     DH

@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="css/about.css" type="text/css">
     <meta charset="utf-8">
     <title>OW! - About</title>
-    <script type="application/x-javascript" src="js/drawing_functions.js"></script>
 </head>
 
 <body>
@@ -19,46 +18,25 @@
     </div>
     <div class="spacer1">   
     </div>
-    <div id="menu_bar">
-        <table>
-            <tr>
-                <td>
-                    <a href="about.html">About</a>
-                </td>
-                <td>
-                    <a href="players.html">Players</a>
-                </td>
-                <td>
-                    <a href="events.html">Events</a>
-                </td>
-                <td>
-                    <a href="training.html">Training</a>
-                </td>
-                <td>
-                    <a href="media.html">Media</a>
-                </td>
-                <td>
-                    <a href="stash.html">Stash</a>
-                </td>
-                <td>
-                    <a href="contact.html">Contact</a>
-                </td>
-            </tr>
-        </table>
+    <div id="wrap">  
+  <div id="main-handle">  
+    <div class="roundfg">  
+      <ul id="main-nav"> 
+	<li><a href="about.html">About</a></li>
+	<li><a href="players.html">Players</a></li>
+	<li><a href="events.html">Events</a></li>
+	<li><a href="training.html">Training</a></li>
+        <li><a href="media.html">Media</a></li>
+	<li><a href="stash.html">Stash</a></li>
+	<li><a href="contact.html">Contact</a></li>
+      </ul>
     </div>
-    <a href=index.html><img class="logo" src="images/logo.png"></a>
+    </div>
     <div class="image_box">
         <img src="images/cover-1.jpg" class="cover_img">
     </div>
-    <div class="spacer2">
-    </div>
     <div class="content">
-	<div class="content-left">
-	    <canvas id="border-left" height="600px" width="450px"></canvas>
-	    <script>
-		drawRoundedRectangle('border-left', 0, 0, 400, 550, '0B004F');
-	    </script>
-	    <div id="inner-left">
+	    <div class="rounded info" id="inner-left">
 		<u><h2>Who are we?</h2></u>
 		<p>We are an Ultimate Frisbee team with 2 Open (OW! 1 and OW! 2) teams, a woman's team (WOW!) and a mixed team (COW!) all of whom represent the University of Oxford.</p>
 		<u><h2>Can I play?</h2></u>
@@ -66,20 +44,13 @@
 		<p>You can always check-out what your college is doing for Ultimate for that genuine, organic, "closer-to-home" Ultimate experience! Check out the <b><a href="contact.html">contact page</a></b> for details of the college captains.</p>
 		<p>Those of you who are interested in playing club Ultimate please check out our affiliates!</p>
 	    </div>
-	</div>
-	<div class="content-right">
-	    <canvas id="border-right" height="1000px" width="450px"></canvas>
-	    <script>
-		drawRoundedRectangle('border-right', 0, 0, 400, 1100, '848484');
-	    </script>
-	    <div id="inner-right">
+	    <div class="rounded info" id="inner-right">
 		<u><h2>What is Ultimate?</h2></u>
 		<p>Ultimate (shortened from "Ultimate Frisbee" because of trademarks) is an exciting, non-contact team sport, played by hundreds of thousands of athletes the world over. It mixes the best features of sports such as Football, Basketball, American Football and Netball into an elegantly simple yet fascinating and demanding game. To compete at the top level, Ultimate players require an unmatched degree of speed, stamina and agility.</p>
 		<img class="whatisultimate" src="images/whatisultimate.jpg">
 		<p>Ultimate is played by two teams of 7 players. Players cannot run with the disc. When you get the disc you must come to a stop and try to throw it to another player (a bit like netball). By passing from player to player, the offence attempts to work the disc up the pitch towards the endzone they are attacking. If the disc hits the ground or is intercepted or knocked down by the other team, then the opposition takes possession (a change of possession is called a "turnover", like American Football). Possession also changes if a receiver is outside the playing area when he or she catches it.</p>
 		<p>The defending team attempts to stop the team with the disc from making progress upfield by marking them (as in soccer or basketball). The theory is that the offence won't want to pass to a player who is being marked closely, as it's likely to result in an interception. So it boils down to the offence players trying to get free of their markers to receive a pass, while the defence makes every effort to stay with them in the hope of forcing a turnover.</p>
 	    </div>
-	</div>
     </div>
 </div>
 </body>

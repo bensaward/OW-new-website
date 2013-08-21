@@ -7,14 +7,37 @@ p h1 h2 h3 h4 h5 a
 
 body
 {
-    background-image: url('../images/website-bg.png');
-    background-repeat: repeat-y;
-    background-size: cover;
-    background-position: top left;
-    background-attachment: fixed;
+color: #222;
+font-family: 'Droid Sans', arial, sans-serif;
+-webkit-font-smoothing: antialiased;
+background: -moz-radial-gradient(farthest-side, transparent 90%, rgba(0, 0, 0, 0.2) 150%) white;
+background: -webkit-gradient(radial, center center, 500, center center, 1400, from(transparent), to(rgba(0, 0, 0, 0.6))) white;
+background-image: -webkit-gradient(radial, 50% 50%, 500, 50% 50%, 1400, from(transparent), to(rgba(0, 0, 0, 0.597656)));
+background-repeat-x: initial;
+background-repeat-y: initial;
+background-attachment: initial;
+background-position-x: initial;
+background-position-y: initial;
+background-origin: initial;
+background-clip: initial;
+background-color: white;
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-box-align: center;
+-webkit-box-pack: center;
+display: -moz-box;
+-moz-box-orient: vertical;
+-moz-box-align: center;
+-moz-box-pack: center;
+display: -o-box;
+-o-box-orient: vertical;
+-o-box-align: center;
+-o-box-pack: center;
+width: 100%;
 }
 
-div.main_body
+
+.main_body
 {
     width: 900px;
     height: 2000px;
@@ -25,7 +48,7 @@ div.main_body
     opacity: 0.9;
 }
 
-div.title_head
+.title_head
 {
     width: 100%;
     height: 90px;
@@ -37,7 +60,7 @@ div.title_head
     background-color: rgb(4, 9, 58);
 }
 
-div.sport_name
+.sport_name
 {
     width: 20%;
     height: 100%;
@@ -50,16 +73,8 @@ div.sport_name
     background-color: rgb(4, 9, 58);
 }
 
-div.spacer1
-{
-    width: 100%;
-    height: 10px;
-    position: relative;
-    top: 90px;
-    background-color: #000000;
-}
 
-#menu_bar
+#menu-bar
 {
     width: 100%;
     height: 36px;
@@ -68,30 +83,29 @@ div.spacer1
     top: 100px;
 }
 
-#menu_bar table tr td a
+
+#menu-bar li
 {
-    padding: 10px 45px 30px 10px;
-    color: #FFFFFF;
-    text-decoration: none;
-}
-table
-{
-    table-layout: fixed;
-    background-color: #000000;
-    position: absolute;
-    margin-left: 195px;
-    height: 30px;
+float: left
 }
 
-td
+#menu-bar a
 {
-    height: 30px;
-    background-color: #0B0B61;
-    text-align: center;
-    overflow: hidden;
-    width: auto;
-    font-size: medium;
-    color: #FFFFFF;
+display:block;
+width: 127px;
+height: 36px;
+background-color: white;
+border-style:solid;
+border-color: black;
+border-width: 1px;
+text-decoration:none;
+padding: 0.5em 0 0 0;
+}
+#menu-bar ul
+{
+list-style-type:none;
+margin:0;
+padding: 0;
 }
 
 img.logo
@@ -118,14 +132,6 @@ img.cover_img
     height: auto;
 }
 
-div.spacer2
-{
-    width: 100%;
-    height: 10px;
-    background-color: #000000;
-    position: absolute;
-    top: 438px;
-}
 
 div.content
 {
@@ -137,70 +143,110 @@ div.content
 
 div.content-left
 {
-    width: 45%;
-    position: relative;
-    left: 2.5%;
 }
 
-#border-left
+
+
+.rounded
 {
-    opacity: 1;
-    position: relative;
-    left: 0px;
-    top: 20px;
+	/*border-radius: 10px*/
 }
 
-#inner-left
+.info
 {
-    width: 350px;
-    height: 500px;
-    position: absolute;
-    top: 25px;
-    left: 25px;
+	padding: 0.2em 0.7em 0.4em 0.7em;
     text-align: left;
     font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype", Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
     /*font-family: Verdana, Geneva, sans-serif;*/
-    color: #848484;
+	background-color: white;
 }
-
 #inner-left p a
 {
+	
     text-decoration: none;
     color: #848484;
 }
 
-div.content-right
+
+#inner-left
 {
-    position: absolute;
-    width: 45%;
-    left: 52.5%;
-    top: 0px;
+    width: 50%;
+	margin: 0 0.7em 0 0;
+    height: 100%;
+	display: block;
+	float:left;
+	
 }
 
-#border-right
-{
-    position: absolute;
-    left: 0px;
-    top: 20px;
-}
 
 #inner-right
 {
-    width: 350px;
-    height: 900px;
-    position: absolute;
-    top: 25px;
-    left: 25px;
-    text-align: left;
-    color: #0B004F;
-    font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype", Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
+	width: 50%;
+	margin-left	:50%;
+	display: block;
+	float: right;
+	position: absolute;;
 }
 
 .whatisultimate
 {
-    width: 300px;
-    height: 200px;
     position: relative;
     margin-left: auto;
     margin-right: auto;
 }
+
+n-nav {  
+    margin: 0px 0px 0px 2px;  
+    text-align: left;  
+    min-height: 25px;  
+    padding-top: 10px;  
+    padding-left: 0px;  
+}  
+#main-handle {  
+    width: 705px;  
+    float: rightright;  
+    margin-top: -1px;  
+}  
+#main-nav li {  
+    display: inline;  
+    list-style: none;  
+}  
+#main-nav li a {  
+    margin-right: 5px;  
+    font-size: 15px;  
+    text-decoration: none;  
+    color: #f2f2f2;  
+    font-family: Arial, Helvetica, sans-serif;  
+    text-transform: uppercase;  
+    font-weight: bold;  
+    padding: 10px;  
+    outline: 0;  
+    position: relative;  
+    top: -2px;  
+}  
+#main-nav li a:hover, #main-nav li a.active {  
+    background: #514539;  
+}  
+#sub-link-bar {  
+    background: #514539;  
+    min-height: 10px;  
+    border-bottom: #645546 1px solid;  
+}  
+.sub-links {  
+    display: none;  
+    position: absolute;  
+    width: 100%;  
+    top: -30px;  
+    text-align: left;  
+    left: 0px;  
+}  
+#main-nav li .sub-links li a:hover{  
+    background: #2d2620;  
+}  
+#main-nav li a.close{  
+    display: none;    
+    position: absolute;  
+}  
+#main-nav li a.close:hover{  
+    background: #900;  
+}  

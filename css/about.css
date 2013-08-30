@@ -48,37 +48,6 @@ width: 100%;
     opacity: 0.9;
 }
 
-.title_head
-{
-    width: 100%;
-    height: 90px;
-    position: absolute;
-    top: 0px;
-    text-align: center;
-    font-size: larger;
-    color: #848484;
-    background-color: rgb(4, 9, 58);
-}
-
-.title_head a
-{
-    color: #848484;
-    text-decoration: none;
-}
-
-.sport_name
-{
-    width: 20%;
-    height: 100%;
-    position: absolute;
-    top: 0px;
-    left: 80%;
-    text-align: center;
-    font-size: medium;
-    color: #848484;
-    background-color: rgb(4, 9, 58);
-}
-
 #menu-bar
 {
     width: 100%;
@@ -166,14 +135,14 @@ div.content-left
 
 .info
 {
-    padding: 0.2em 0.7em 0.4em 0.7em;
+	padding: 0.2em 0.7em 0.4em 0.7em;
     text-align: left;
     font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype", Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
-
+    /*font-family: Verdana, Geneva, sans-serif;*/
 }
 #inner-left p a
 {
-    
+	
     text-decoration: none;
     color: #848484;
 }

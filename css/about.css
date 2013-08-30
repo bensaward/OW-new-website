@@ -60,6 +60,12 @@ width: 100%;
     background-color: rgb(4, 9, 58);
 }
 
+.title_head a
+{
+    color: #848484;
+    text-decoration: none;
+}
+
 .sport_name
 {
     width: 20%;

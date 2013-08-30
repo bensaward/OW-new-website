@@ -40,7 +40,7 @@ width: 100%;
 .main_body
 {
     width: 900px;
-    height: 2000px;
+    min-height: 1000px;
     position: relative;
     margin-left: auto;
     margin-right: auto;
@@ -79,7 +79,6 @@ width: 100%;
     background-color: rgb(4, 9, 58);
 }
 
-
 #menu-bar
 {
     width: 100%;
@@ -92,20 +91,20 @@ width: 100%;
 
 #menu-bar li
 {
-float: left
+  float: left
 }
 
 #menu-bar a
 {
-display:block;
-width: 127px;
-height: 36px;
-background-color: white;
-border-style:solid;
-border-color: black;
-border-width: 1px;
-text-decoration:none;
-padding: 0.5em 0 0 0;
+  display:block;
+  width: 127px;
+  height: 36px;
+  background-color: white;
+  border-style:solid;
+  border-color: black;
+  border-width: 1px;
+  text-decoration:none;
+  padding: 0.5em 0 0 0;
 }
 #menu-bar ul
 {
@@ -126,10 +125,7 @@ img.logo
 
 div.image_box
 {
-    position: absolute;
-    top: 136px;
     width: 100%;
-    height: 600px;
 }
 
 img.cover_img
@@ -141,10 +137,20 @@ img.cover_img
 
 div.content
 {
+
+    overflow: auto;
     width: 100%;
     text-align: center;
-    position: absolute;
-    top: 448px;
+	  background-color: white;
+    min-height:800px;
+}
+ 
+#footer
+{
+  clear: both;
+  height: 40px;
+  width: 100%
+  background-color: green;
 }
 
 div.content-left
@@ -160,15 +166,14 @@ div.content-left
 
 .info
 {
-	padding: 0.2em 0.7em 0.4em 0.7em;
+    padding: 0.2em 0.7em 0.4em 0.7em;
     text-align: left;
     font-family: Perpetua, Baskerville, "Big Caslon", "Palatino Linotype", Palatino, "URW Palladio L", "Nimbus Roman No9 L", serif;
-    /*font-family: Verdana, Geneva, sans-serif;*/
-	background-color: white;
+
 }
 #inner-left p a
 {
-	
+    
     text-decoration: none;
     color: #848484;
 }
@@ -176,22 +181,20 @@ div.content-left
 
 #inner-left
 {
-    width: 50%;
-	margin: 0 0.7em 0 0;
-    height: 100%;
-	display: block;
-	float:left;
+  background-color:white;
+    width: 45%;
+    float:left;
 	
 }
 
 
 #inner-right
 {
-	width: 50%;
-	margin-left	:50%;
-	display: block;
+  background-color:white;
+	width: 45%;
+  border-style: solid;
+  border-width: 0 0 0 2px;
 	float: right;
-	position: absolute;;
 }
 
 .whatisultimate
@@ -208,11 +211,21 @@ n-nav {
     padding-top: 10px;  
     padding-left: 0px;  
 }  
+
+#header{
+  width: 100%;
+  background-color: rgb(4, 9, 58);
+  height: 39px;
+}
+
 #main-handle {  
     width: 705px;  
-    float: rightright;  
-    margin-top: -1px;  
+    float: right;  
+    height:42px;
+    
 }  
+
+
 #main-nav li {  
     display: inline;  
     list-style: none;  
@@ -225,10 +238,10 @@ n-nav {
     font-family: Arial, Helvetica, sans-serif;  
     text-transform: uppercase;  
     font-weight: bold;  
-    padding: 10px;  
     outline: 0;  
+    padding: 10px;
     position: relative;  
-    top: -2px;  
+    top: -6px;  
 }  
 #main-nav li a:hover, #main-nav li a.active {  
     background: #514539;  

@@ -16,6 +16,7 @@ my $DBPASS = "";
 my $DBHOST = "";
 my $TNAME_PW = "";  #table name for users and password hashes
 my $TNAME_POSTS = "";   #table name for db containing hashes
+my $FILE_LOCATION = "";
 
 ### ENG CFG ###
 
@@ -56,6 +57,8 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
             -uri=>'../content-manager/login.html',
             -nph=>1,
             -status=>'303 See Other');
+        
+        die "USER string contained illegal characters, stopped";
     }
     else
     {
@@ -74,6 +77,7 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
                 -uri=>'../content-manager/login.html',
                 -nph=>1,
                 -status=>'303 See Other');
+            
         }
         else
         {
@@ -139,10 +143,18 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
     }
 }
 
-sub get_title   ## get_title(DATE) -> returns the 5 most recent article names. table order: id name date author content image
+sub upload_image ## upload_image(image_src, db_id)
 {
-    my $date_seconds=$_[0];
-    my $count=0;
+    my $image_src = $_[0];
+    my $filename;
+    $FILE_LOCATION = "$FILE_LOCATION/posts";
+    my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
+    my $dbqstring = "UPDATE $TNAME_POSTS SET image=$FILE_LOCATION/$filename";
+}
+
+sub get_title   ## get_title(DATE) -> returns the 5 most recent article names. table order: id name date author content image
+{               ## returns "error" if posts cannot be retrieved.
+    my ($date_seconds, $count) = ($_[0], 0);
     my (@results, @id, @name, @author, @published);
     my ($day, $month, $year) = (gmtime($date_seconds))[3,4,5];
     $year += 1900;
@@ -152,28 +164,48 @@ sub get_title   ## get_title(DATE) -> returns the 5 most recent article names. t
     my $string = "SELECT * FROM $TNAME_POSTS WHERE date < $date ORDER BY date DESC LIMIT 5";
     my $dbq = $dbh->prepare($string);
     $dbq->execute();
-    while (@results = dbq->fetchrow_array())
+    if ($dbq->rows == 0)
     {
-        $id[$count]=$results[0];
-        $name[$count]=$results[1];
-        $author[$count]=$results[2];
-        $published[$count]=$results[3];
-        $count+=1;
+        return "error";
+        die "could not retrieve posts before $day-$month-$year, stopped";
     }
+    else
+    {
+        while (@results = dbq->fetchrow_array())
+        {
+            $id[$count]=$results[0];
+            $name[$count]=$results[1];
+            $author[$count]=$results[2];
+            $published[$count]=$results[3];
+            $count+=1;
+        }
     
-    print "$id[0]:$name[0]:$author[0]:$published[0]:$id[1]:$name[1]:$author[1]:$published[1]:$id[2]:$name[2]:$author[2]:$published[2]:$id[3]:$name[3]:$author[3]:$published[3]:$id[4]:$name[4]:$author[4]:$published[4]";
+        print "$id[0]:$name[0]:$author[0]:$published[0]:$id[1]:$name[1]:$author[1]:$published[1]:$id[2]:$name[2]:$author[2]:$published[2]:$id[3]:$name[3]:$author[3]:$published[3]:$id[4]:$name[4]:$author[4]:$published[4]";
+    }
 }
 
-sub delete_post ## delete_post(ID) -> deletes post with said ID in the database
+sub delete_post ## delete_post(ID) -> deletes post with said ID in the database : returns "success" or "error"
 {
     my $id=$_[0];
     my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
-    my $string = "DELETE FROM $TNAME_POSTS WHERE ID = $id";
+    my $string = "DELETE FROM $TNAME_POSTS WHERE id = $id";
     my $dbq = $dbh->prepare($string);
     $dbq->execute();
+    my $db_check = "SELECT * FROM $TNAME_POSTS WHERE id = $id";
+    my $db_exec = $dbh->prepare($db_check);
+    $db_exec->execute();
+    if (!($db_exec->rows == 0))
+    {
+        print "error";
+        die "could not delete post id=$id, stopped";
+    }
+    else
+    {
+        print "success";
+    }
 }
 
-sub get_content ## get_content(ID) ->  returns a string containing the table information
+sub get_content ## get_content(ID) ->  returns a string containing the table information... returns "error" on error
 {
     my $id = $_[0];
     my ($title, $author, $content, $date, $image);
@@ -188,18 +220,8 @@ sub get_content ## get_content(ID) ->  returns a string containing the table inf
     }
     if ($dbq->rows == 0 || $dbq->rows > 1)
     {
-        print 'content-type: text/html
-        <html>
-            <head>
-                <title>Oops</title>
-                <meta charset="utf-8">
-                <script type="text/javascript">
-                    alert("There was an error in retrieving post ID=$id");
-                </script>
-            </head>
-            </html>
-        ';
-        die 'Could not retrieve post $id, stopped';
+        print 'error';
+        die "Could not retrieve post $id, stopped";
     }
     else
     {
@@ -211,7 +233,7 @@ sub get_content ## get_content(ID) ->  returns a string containing the table inf
     }
     
 }
-sub add_content ## add_content(title, date, author, content, image_src) -> returns true if content is added successfully
+sub add_content ## add_content(title, date, author, content, image_src) -> returns true if content is added successfully, error if not.
 {
     my ($title, $date, $author, $content, $image_src) = ($_[0], $_[1], $_[2], $_[3], $_[4]);
     my ($day, $month, $year) = (gmtime($date))[3,4,5];
@@ -227,6 +249,7 @@ sub add_content ## add_content(title, date, author, content, image_src) -> retur
     if ($dbhandle->rows == 0)
     {
         print "error";
+        die "Could not add content, stopped";
     }
     else
     {

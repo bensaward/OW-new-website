@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+use v5.10.1;
 use warnings;
 use strict;
 use CGI;
@@ -30,6 +31,38 @@ sub snonce ## eg snonce(sessionID) -> returns nonce written to file
     print "sessionID=$sessionID snonce=$snonce";
     close session_file;
     print "$snonce";
+}
+
+sub authenticated ## authenticated(sessionid) -> returns 1 if authenticated, 0 if not
+{
+    my ($session, $current_time) = ($_[0], time);
+    open (session_file, "../data/sessions.txt");
+    while (<session_file>)
+    {
+        if ($_ =~ /"$session"/ && $_ =~ /"authenticated"/)
+        {
+            my @words = split(/ /);  ## format: sessionID=$session snonce=$snonce authenticated until $year/$month/$day $hour:$minute:$second
+            my ($exp_date, $exp_time) = (@words)[4,5];
+            my ($exp_year, $exp_month, $exp_day) = (split(/\//, $exp_date))[0,1,2];
+            my ($exp_hour, $exp_minute, $exp_second) = (split(/:/))[0,1,2];
+            my $expire_time = DateTime->new(
+                -year=>$exp_year,
+                -month=>$exp_month,
+                -day=>$exp_day,
+                -hour=>$exp_hour,
+                -minute=>$exp_minute,
+                -second=>$exp_second,
+            );
+            if ($current_time < $exp_time)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
 }
 
 sub verify ## verify (string) -> returns: 0 on non-alphanum else 1
@@ -144,12 +177,37 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
 }
 
 sub upload_image ## upload_image(image_src, db_id)
-{
-    my $image_src = $_[0];
-    my $filename;
-    $FILE_LOCATION = "$FILE_LOCATION/posts";
-    my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
-    my $dbqstring = "UPDATE $TNAME_POSTS SET image=$FILE_LOCATION/$filename";
+{    
+    my ($image_src, $db_id, $session) = @_[0,1,2];
+    if (authenticated($session) == 1)
+    {
+        my ($filename, $result);
+        $FILE_LOCATION = "$FILE_LOCATION/posts";
+        my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
+        my ($dbqstring, $check_string) = ("UPDATE $TNAME_POSTS SET image=$FILE_LOCATION/$filename WHERE id=$db_id", "SELECT image FROM $TNAME_POSTS WHERE id=$db_id");
+        my $dbquery = $dbh->prepare($dbqstring);
+        $dbquery->execute();
+        my $db_check = $dbh->prepare($check_string);
+        $db_check->execute();
+        if ($db_check->rows == 0)
+        {
+            print "error";
+            die "Could not add image_src to the database, stopped";
+        }
+        else
+        {
+            $result = $db_check->fetchrow_array();
+            if ($result == "$FILE_LOCATION/$filename")
+            {
+                return "success";
+            }
+            else
+            {
+                print "error";
+                die "Something went wrong, stopped";
+            }
+        }
+    }
 }
 
 sub get_title   ## get_title(DATE) -> returns the 5 most recent article names. table order: id name date author content image
@@ -166,7 +224,7 @@ sub get_title   ## get_title(DATE) -> returns the 5 most recent article names. t
     $dbq->execute();
     if ($dbq->rows == 0)
     {
-        return "error";
+        return "Could not retrieve posts";
         die "could not retrieve posts before $day-$month-$year, stopped";
     }
     else
@@ -179,8 +237,14 @@ sub get_title   ## get_title(DATE) -> returns the 5 most recent article names. t
             $published[$count]=$results[3];
             $count+=1;
         }
+        my ($i, $string) = (0, $count+1);
+        while ($i < $count)
+        {
+            $string = "$string:$id[$i]:$name[$i]:$author[$i]:$published[$i]";
+            $i++;
+        }
     
-        print "$id[0]:$name[0]:$author[0]:$published[0]:$id[1]:$name[1]:$author[1]:$published[1]:$id[2]:$name[2]:$author[2]:$published[2]:$id[3]:$name[3]:$author[3]:$published[3]:$id[4]:$name[4]:$author[4]:$published[4]";
+        print "$string";
     }
 }
 
@@ -196,12 +260,12 @@ sub delete_post ## delete_post(ID) -> deletes post with said ID in the database 
     $db_exec->execute();
     if (!($db_exec->rows == 0))
     {
-        print "error";
+        print "Could not delete post";
         die "could not delete post id=$id, stopped";
     }
     else
     {
-        print "success";
+        print "Post was deleted";
     }
 }
 
@@ -220,7 +284,7 @@ sub get_content ## get_content(ID) ->  returns a string containing the table inf
     }
     if ($dbq->rows == 0 || $dbq->rows > 1)
     {
-        print 'error';
+        print "Could not retrieve post $id";
         die "Could not retrieve post $id, stopped";
     }
     else
@@ -233,9 +297,9 @@ sub get_content ## get_content(ID) ->  returns a string containing the table inf
     }
     
 }
-sub add_content ## add_content(title, date, author, content, image_src) -> returns true if content is added successfully, error if not.
+sub add_content ## add_content(title, date, author, content, image_src, filehandle) -> returns true if content is added successfully, error if not.
 {
-    my ($title, $date, $author, $content, $image_src) = ($_[0], $_[1], $_[2], $_[3], $_[4]);
+    my ($title, $date, $author, $content, $image_src, $filehandle) = @_[0,1,2,3,4,5];
     my ($day, $month, $year) = (gmtime($date))[3,4,5];
     $year = $year + 1900;
     my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
@@ -248,12 +312,12 @@ sub add_content ## add_content(title, date, author, content, image_src) -> retur
     my @results;
     if ($dbhandle->rows == 0)
     {
-        print "error";
+        print "There was an error in adding the content";
         die "Could not add content, stopped";
     }
     else
     {
-        print "sucess";
+        print "The post has been added!";
     }
 }
 
@@ -284,20 +348,41 @@ if ($reqfunct =~ /get_title/)
 
 if ($reqfunct =~ /delete_post/)
 {
-    my $id = $query->param('id');
-    delete_post($id);
+    my ($id, $session) = ($query->param('id'), $query->param('session'));
+    if (authenticated($session) == 1)
+    {
+        delete_post($id);
+    }
+    else
+    {
+        print "error, you do not have permission to do that";
+        die "Could not delete post id=$id, session=$session is not authenticated. Stopped";
+    }
 }
 
 if ($reqfunct =~ /add_content/)
 {
-    my ($title, $date, $author, $content, $upload) = ($query->param('title'), time, $query->param('author'), $query->param('content'), $query->param('image_src'));
-    my ($day, $month, $year) = (gmtime($date))[3,4,5];
-    $month += 1;
-    $year += 1900;
-    my $published = "$year-$month-$day";
+    my ($session, $title, $date, $author, $content, $filename, $filehandle) = ($query->param('session'), $query->param('title'), time, $query->param('author'), $query->param('content'), $query->param('image_src'), $query->upload('image_src'));
+    if (verify($filename) == 1 && authenticated($session) == 1)
+    {
+        add_content($title, $date, $author, $content, $filename, $filehandle);
+    }
+    else
+    {
+        if (verify($filename) != 1)
+        {
+            print "error, illegal characters in the filename";
+            die "Could not add content, illegal filename. Stopped";
+        }
+        else
+        {
+            print "error, you do not have permission to do that";
+            die "Could not add content, session=$session is not authenticated. Stopped";
+        }
+    }
 }
 
-if ($reqfunct =~ /get_content/)
+if ($reqfunct =~ /get_content/) ## content in db has "+" instead of " ". Will need to modify JS to replace this.
 {
     #code
 }

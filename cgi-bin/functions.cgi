@@ -5,7 +5,7 @@ use warnings;
 use strict;
 use CGI;
 use DBI();
-use Digest::SHA;
+use Digest::SHA qw(sha256_hex);
 use CGI::Cookie;
 use File::Basename;
 
@@ -18,6 +18,7 @@ my $DBHOST = "";
 my $TNAME_PW = "";  #table name for users and password hashes
 my $TNAME_POSTS = "";   #table name for db containing hashes
 my $FILE_LOCATION = "";
+my $DOCUMENT_ROOT = "/home/ben/www";
 
 ### ENG CFG ###
 
@@ -25,18 +26,21 @@ my $FILE_LOCATION = "";
 
 sub snonce ## eg snonce(sessionID) -> returns nonce written to file
 {
+    my $q = CGI->new;   
     my $sessionID=$_[0];
     my $snonce=sha256_hex(int(rand(1000000)));
-    open (session_file, '>>../data/sessions.txt');
-    print "sessionID=$sessionID snonce=$snonce";
+    open (session_file, ">>", "$DOCUMENT_ROOT/data/sessions.txt") or die $!; ##need to fix this with "chmod a+w" 
+    print session_file "sessionID=$sessionID snonce=$snonce";
     close session_file;
+    print $q->header(-type=>"text/plain",
+                     -access_control_allow_origin=>"*");
     print "$snonce";
 }
 
 sub authenticated ## authenticated(sessionid) -> returns 1 if authenticated, 0 if not
 {
     my ($session, $current_time) = ($_[0], time);
-    open (session_file, "../data/sessions.txt");
+    open (session_file, "$DOCUMENT_ROOT/data/sessions.txt") or die $!;
     while (<session_file>)
     {
         if ($_ =~ /"$session"/ && $_ =~ /"authenticated"/)
@@ -85,12 +89,9 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
     my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
     if (verify($user) == 0)
     {
-        my $q=CGI->new();
-        print $q->redirect(
-            -uri=>'../content-manager/login.html',
-            -nph=>1,
-            -status=>'303 See Other');
-        
+        my $q = CGI->new;   
+        print $q->header(-type=>'text/plain',);
+        print "fail";
         die "USER string contained illegal characters, stopped";
     }
     else
@@ -105,17 +106,14 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
         }
         if ($dbq->rows == 0)
         {
-            my $q=CGI->new();
-            print $q->redirect(
-                -uri=>'../content-manager/login.html',
-                -nph=>1,
-                -status=>'303 See Other');
-            
+            my $q = CGI->new;   
+            print $q->header(-type=>'text/plain',);
+            print "fail";
         }
         else
         {
             my $server_result;
-            open (snonce_file, "../data/sessions.txt");
+            open (snonce_file, "$DOCUMENT_ROOT/data/sessions.txt") or die $!;
             while (<snonce_file>)
             {
                 if ( $_ =~ /"$session"/)
@@ -142,8 +140,8 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
                 $year += 1900;
                 $month += 1;
 
-                open(in_file, "../data/sessions.txt");
-                open(out_file, "../data/sessions.txt");
+                open(in_file, "$DOCUMENT_ROOT/data/sessions.txt") or die $!;
+                open(out_file, "$DOCUMENT_ROOT/data/sessions.txt") or die $!;
                 
                 while (<in_file>)
                 {
@@ -158,6 +156,8 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
                 $cookie1->bake();
                 
                 my $q=CGI->new();
+                print $q->header(-type=>'text/plain',);
+                print "success";
                 print $q->redirect(
                 -uri=>'../content-manager/manager.html',
                 -nph=>1,
@@ -165,12 +165,7 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
             }
             else
             {
-                my $q=CGI->new();
-                print $q->redirect(
-                    -uri=>'../content-manager/login.html',
-                    -nph=>1,
-                    -status=>'303 See Other'
-                    );
+                print "fail";
             }
         }
     }
@@ -191,6 +186,8 @@ sub upload_image ## upload_image(image_src, db_id)
         $db_check->execute();
         if ($db_check->rows == 0)
         {
+            my $q = CGI->new;   
+            print $q->header(-type=>'text/plain',);
             print "error";
             die "Could not add image_src to the database, stopped";
         }
@@ -199,10 +196,14 @@ sub upload_image ## upload_image(image_src, db_id)
             $result = $db_check->fetchrow_array();
             if ($result == "$FILE_LOCATION/$filename")
             {
-                return "success";
+                my $q = CGI->new;   
+                print $q->header(-type=>'text/plain',);
+                print "success";
             }
             else
             {
+                my $q = CGI->new;   
+                print $q->header(-type=>'text/plain',);
                 print "error";
                 die "Something went wrong, stopped";
             }
@@ -224,7 +225,9 @@ sub get_title   ## get_title(DATE) -> returns the 5 most recent article names. t
     $dbq->execute();
     if ($dbq->rows == 0)
     {
-        return "Could not retrieve posts";
+        my $q = CGI->new;   
+        print $q->header(-type=>'text/plain',);
+        print "Could not retrieve posts";
         die "could not retrieve posts before $day-$month-$year, stopped";
     }
     else
@@ -243,7 +246,8 @@ sub get_title   ## get_title(DATE) -> returns the 5 most recent article names. t
             $string = "$string:$id[$i]:$name[$i]:$author[$i]:$published[$i]";
             $i++;
         }
-    
+        my $q = CGI->new;   
+        print $q->header(-type=>'text/plain',);
         print "$string";
     }
 }
@@ -258,6 +262,8 @@ sub delete_post ## delete_post(ID) -> deletes post with said ID in the database 
     my $db_check = "SELECT * FROM $TNAME_POSTS WHERE id = $id";
     my $db_exec = $dbh->prepare($db_check);
     $db_exec->execute();
+    my $q = CGI->new;   
+    print $q->header(-type=>'text/plain',);
     if (!($db_exec->rows == 0))
     {
         print "Could not delete post";
@@ -277,6 +283,8 @@ sub get_content ## get_content(ID) ->  returns a string containing the table inf
     my $dbquery = "SELECT * FROM $TNAME_POSTS WHERE id = $id";
     my $dbq = $dbh->prepare($dbquery);
     $dbq->execute();
+    my $q = CGI->new;   
+    print $q->header(-type=>'text/plain',);
     my @results;
     while (@results=fetchrow_array())
     {
@@ -310,6 +318,8 @@ sub add_content ## add_content(title, date, author, content, image_src, filehand
     my $dbhandle = $dbh->prepare($dbstring);
     $dbhandle->execute();
     my @results;
+    my $q = CGI->new;   
+    print $q->header(-type=>'text/plain',);
     if ($dbhandle->rows == 0)
     {
         print "There was an error in adding the content";
@@ -325,6 +335,7 @@ sub add_content ## add_content(title, date, author, content, image_src, filehand
 
 my $query = CGI->new();
 my $reqfunct=$query->param('request');
+
 if ($reqfunct =~ /snonce/)
 {
     my $session = $query->param('session');

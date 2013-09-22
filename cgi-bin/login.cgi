@@ -19,7 +19,7 @@ print <<"EOF";
 </head>
 <body>
     <div class="center_content">
-        <form onSubmit="authenticate(this);">
+        <form onSubmit="return authenticate(this);">
             Username: <input type="text" id="username">
             Password: <input type="password" id="password">
             <input type="submit" value="login">

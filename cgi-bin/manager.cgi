@@ -58,14 +58,14 @@ Content Type: text/html\n\n
 </head>
 <body>
     <h1>Authorisation Required<h1>
-    <p>Please <a href="../content-manager/login.html">log in</a>!
+    <p>Please <a href="../cgi-bin/login.cgi">log in</a>!
     </body>
 </html>
 EOF
 }
 else
 {
-    open(session_file, "../data/sessions.txt");
+    open(session_file, "../data/authed.txt");
     while (<session_file>)
     {
         if ($_ =~ /"$session"/ && $_ =~ /authorised/)
@@ -105,7 +105,7 @@ else
                 </head>
                 <body>
                     <h1>Authorisation Required<h1>
-                    <p>Please <a href="../content-manager/login.html>log in</a>!
+                    <p>Please <a href="../cgi-bin/login.cgi">log in</a>!
                 </body>
                 </html>
                 EOF

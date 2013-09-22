@@ -34,25 +34,26 @@ function authenticate(form)
         sessionID = sessionID.toString(CryptoJS.enc.Hex);                   
         var cnonce = CryptoJS.SHA256(seed2);
         cnonce = cnonce.toString(CryptoJS.enc.Hex);            
-        console.log("sessionID="+sessionID+" cnonce="+cnonce);
         xml.onreadystatechange = function()
         {
             console.log("XMLHttpRequest Changed state to "+xml.readyState+" and state"+xml.status);
             if (xml.readyState == 4 && xml.status == 200)
             {
-                console.log("snonce = "+responseText);
+                console.log("snonce = "+xml.responseText);
                 snonce = xml.responseText;
                 var hash_string = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
                 var internal = hash_string+cnonce+snonce;
                 var result = CryptoJS.SHA256(internal);
                 result = result.toString(CryptoJS.enc.Hex);
-                console.log("result = "+result);
+                console.log("result = "+result+" cnonce="+cnonce+" snonce="+snonce+" initial result="+hash_string);
                 xml1.onreadystatechange = function()
                 {
-                    if (xml.readyState == 4 && xml.status == 200)
+                    if (xml1.readyState == 4 && xml1.status == 200)
                     {
-                        var passfail = xml.responseText;
-                        if (passfail.search("fail"))
+                        var passfail = xml1.responseText;
+                        var fail = passfail.search("fail");
+                        console.log("fail position "+fail);
+                        if (fail >= 0)
                         {
                             alert("Incorrect username or password!");
                         }

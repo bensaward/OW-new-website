@@ -74,36 +74,36 @@ function expand_manage()
                 alert("There was an error in retrieving the posts from the Database!");
                 return;
             }
-            var e = responce.search(":");
-            var post_count = responce.slice(0, e-1);
-            response = response.slice(e+1);
+            var post_count = responce.slice(0, 1);
+            response = response.slice(3);
             
             var i=0;
             while (i < post_count)
             {
-                var a = response.search(":");
-                id[i] = response.slice(0, a-1);
-                response = response.slice(a+1);
+                var a = response.search("::");
+                id[i] = response.slice(0, a);
+                response = response.slice(a+2);
                 
-                var b = response.search(":");
-                title[i] = response.slice(0 , b-1);
-                response = response.slice(b+1);
+                var b = response.search("::");
+                title[i] = response.slice(0 , b);
+                response = response.slice(b+2);
                 
-                var c = response.search(":");
-                author[i] = response.slice(0, c-1);
-                response = response.slice(c+1);
+                var d = response.search("::");
+                date_published[i] = response.slice(0, d);
+                response = response.slice(d+2);
                 
                 if (i+1 == post_count)
                 {
-                    date_published[i] = response;
+                    author[i] = response;
                     break;
                 }
-                
-                var d = response.search(":");
-                date_published[i] = response.slice(0, d-1);
-                response = response.slice(d+1);
-                
-                i++;
+                else
+                {
+                    var c = response.search("::");
+                    author[i] = response.slice(0, c);
+                    response = response.slice(c+2);
+                    i++;
+                }
             }
             
             var contentManagerDiv = document.getElementById("manager-posts-handle");

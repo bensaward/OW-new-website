@@ -6,14 +6,16 @@ use CGI;
 use DateTime;
 use CGI::Cookie;
 
-my ($cookie, $redirect) = (CGI->new(), CGI->new());
-my $session = $cookie->cookie('SessionID') || undef;
+my $WEBADDRESS = "";
+my $cookie = CGI->new();
+my $response = CGI->new();
+my $session = $cookie->cookie('SessionID');
 
 sub print_html
 {
     print <<"EOF";
-Content Type: text/html\n\n
 <!DOCTYPE html>
+<html>
 <head>
     <title>Content Manager</title>
     <link rel="stylesheet" type="text/css" src="../content-manager/manager.css">
@@ -44,24 +46,17 @@ Content Type: text/html\n\n
         </div>
     </div>
 </body>
+</html>
 EOF
 }
 
 if (!(defined($session)))
 {
-    print <<"EOF";
-Content Type: text/html\n\n
-<html>
-<head>
-    <title>Authorisation Required!</title>
-    <meta charset="utf-8">
-</head>
-<body>
-    <h1>Authorisation Required<h1>
-    <p>Please <a href="../cgi-bin/login.cgi">log in</a>!
-    </body>
-</html>
-EOF
+#    die "no session cookie recovered";
+    print "Status: 303 Authorisation Required\n";
+    print "Location: $WEBADDRESS/cgi-bin/login.cgi\n";
+    print $response->header(-type=>'text/plain',);
+    print "Not Authenticated";
 }
 else
 {
@@ -72,7 +67,7 @@ else
         ##format in file is "sessionID=$session snonce=$snonce authorised until $year/$month/$day $hour:$minutes:$seconds"
         {
             my $server_time = time;
-            my @words = split (/ /);
+            my @words = split(/ /);
             my ($date, $time) = ($words[4], $words[5]);
             my ($year, $month, $day) = (split(/\//, $date))[0,1,2];
             my ($hour, $minute, $second) =  (split(/:/, $time))[0,1,2];
@@ -85,30 +80,19 @@ else
                 -second=>$second,
             );
             
-            if ($expires->epoch() < $server_time)
+            if ($expires->epoch() > $server_time)
             {
+#                die "authed";
+                print $response->header(-type=>'text/html');
                 print_html;
             }
             else
             {
-                print $redirect->header(
-                    -type=>'text/html',
-                    -nph=>1,
-                    -status=>'401 Authorisation Required',
-                );
-                print <<"                EOF";
-                Content Type: text/html\n\n
-                <html>
-                <head>
-                    <title>Authorisation Required!</title>
-                    <meta charset="utf-8">
-                </head>
-                <body>
-                    <h1>Authorisation Required<h1>
-                    <p>Please <a href="../cgi-bin/login.cgi">log in</a>!
-                </body>
-                </html>
-                EOF
+ #               die "not authed";
+                print "Status: 303 Authorisation Required\n";
+                print "Location: $WEBADDRESS/cgi-bin/login.cgi\n";
+                print $response->header(-type=>'text/plain',);
+                print "Not Authenticated";
             }
         }
     }

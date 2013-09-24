@@ -36,7 +36,6 @@ body
   width: 100%;
 }
 
-
 .main_body
 {
     width: 900px;
@@ -44,8 +43,8 @@ body
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    background-color: rgba(0, 0, 0, 0.6);
-    opacity: 0.9;
+    /* background-color: rgba(0, 0, 0, 0.6);
+    opacity: 0.9; */
 }
 
 #menu-bar

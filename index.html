@@ -3,57 +3,61 @@
 <html>
 <head>
     <link rel="stylesheet" href="css/index.css" type="text/css">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
     <meta charset="utf-8">
     <title>OW! - Oxford University Ultimate</title>
+    <script src="js/index.js" type="text/javascript"></script>
 </head>
 
 <body>
 <div class="main_body"> 
-    <div class="title_head">
-        <h1>Oxford University Ultimate</h1>
-        <div class="sport_name">
-            <p>Ultimate</p>
-            <p>Frisbee</p>
+    <div id="wrap">  
+        <div id="header">
+            <div id="main-handle">  
+                <div class="roundfg">  
+                    <ul id="main-nav"> 
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="players.html">Players</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="training.html">Training</a></li>
+                        <li><a href="media.html">Media</a></li>
+                        <li><a href="stash.html">Stash</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="spacer1">   
-    </div>
-    <div id="menu_bar">
-        <table>
-            <tr>
-                <td>
-                    <a href="about.html">About</a>
-                </td>
-                <td>
-                    <a href="players.html">Players</a>
-                </td>
-                <td>
-                    <a href="events.html">Events</a>
-                </td>
-                <td>
-                    <a href="training.html">Training</a>
-                </td>
-                <td>
-                    <a href="media.html">Media</a>
-                </td>
-                <td>
-                    <a href="stash.html">Stash</a>
-                </td>
-                <td>
-                    <a href="contact.html">Contact</a>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <img class="logo" src="images/logo.png">
-    <div class="image_box">
-        <img src="images/cover-1.jpg" class="cover_img">
-    </div>
-    <div class="spacer2">
-    </div>
-    <div class="content" id="content">
-        <h1>Put all of the content here!</h1>
+        <div id="scroll-box">
+            <script type="text/javascript">
+                window.onload=function()
+                {
+                    console.log("script exec'd");
+                    var news = new XMLHttpRequest;
+                    news.open("GET","/cgi-bin/get_news.cgi",true);
+                    news.onreadystatechange=function()
+                    {
+                        if (news.readyState == 4 && news.status == 200)
+                        {
+                            var text = news.responseText;
+                            textScroll(text, "scroll-box", 1);
+                        }
+                    }
+                    news.send(null);
+                }
+            </script>
+        </div>
+        <div class="image_box" id="logo-box">
+            <img src="images/logo.png" class="logo-img">
+        </div>
+        <div id="content-holder">
+            <div id="article-holder">
+                <div class="article" id="a_div1">
+                    <h2>Welcome to our new website!</h2>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
+
 </html>

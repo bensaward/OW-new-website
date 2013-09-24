@@ -34,6 +34,7 @@ my $TNAME_PW = "";  #table name for users and password hashes
 my $TNAME_POSTS = "";   #table name for db containing hashes
 my $FILE_LOCATION = "";
 my $DOCUMENT_ROOT = "";
+my $WEBADDRESS = "";
 
 ### ENG CFG ###
 
@@ -102,7 +103,6 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
     my ($user, $hash, $session, $cnonce, $snonce) = ($_[0], $_[1], $_[2], $_[3], undef);    
     my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1}) or die "Couldn't connect to the database, stopped";
     my $q = CGI->new;   
-    print $q->header(-type=>'text/plain',);
     if (verify($user) == 0)
     {
         print "fail";
@@ -111,7 +111,7 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
     else
     {
         my (@data, $db_hash, @results, $string);
-        $string = "SELECT \'hash\' FROM $TNAME_PW WHERE user = \'$user\'";
+        $string = "SELECT hash FROM $TNAME_PW WHERE user = \'$user\'";
         my $dbq = $dbh->prepare($string);
         $dbq->execute();
         while (@data = $dbq->fetchrow_array())
@@ -120,6 +120,7 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
         }
         if ($dbq->rows == 0)
         {
+            print $q->header(-type=>'text/plain',);
             print "fail no rows found";
         }
         else
@@ -145,7 +146,8 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
                     -name=>'SessionID',
                     -value=>"$session",
                     -expires=>'+3h',
-                    -domain=>'/content-manager/manager.html',
+                    -httponly=>1,
+                    -secure=>0,
                 );
                 
                 my $time = time;
@@ -158,15 +160,15 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
                 print out_file $_;
                 close out_file;
                 
-                print $q->redirect(
-                -uri=>'../cgi-bin/manager.cgi',
-                -nph=>1,
-                -status=>'303 See Other',
-                -cookie=>$cookie1,);
+                print "Status: 303 Other\n";
+                print "Location: $WEBADDRESS/cgi-bin/manager.cgi\n";
+                print "Set-Cookie: $cookie1\n";
+                print $q->header(-type=>'text/plain',);
             }
             else
             {
-                print "fail, incorrect password, result=$server_result, cnonce=$cnonce, snonce=$snonce, serverhash=$db_hash, internal=\"$internal\"";
+                print $q->header(-type=>'text/plain',);
+                print "fail, incorrect password";
             }
         }
     }

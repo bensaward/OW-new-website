@@ -3,14 +3,15 @@ var init_request = new XMLHttpRequest;
 
 function text_decode (text)
 {
-    if (text.search("+") >= 0){text = text.replace(/\+/g, " ");}
-    if (text.search("&quot" ) >= 0){text = text.replace(/&quot/g, "\"");}
-    if (text.search("&apost") >= 0){text = text.replace(/&apost/g, "'");}
-    if (text.search("&colon") >= 0){text = text.replace(/&colon/g, ":");}
-    if (text.search("&semicol") >= 0){text = text.replace(/&semicol/g, ";");}
-    if (text.search("&dolar") >= 0){text = text.replace(/&dolar/g, "$");}
-    if (text.search("&at") >= 0){text = text.replace(/&at/g, "@");}
-    if (text.search("&percent") >= 0){text = text.replace(/&percent/g, "%");}
+    if (text.search(/\+/) >= 0){text = text.replace(/\+/g, " ");}
+    if (text.search(/\&quot/ ) >= 0){text = text.replace(/\&quot/g, "\"");}
+    if (text.search(/\&apost/) >= 0){text = text.replace(/\&apost/g, "'");}
+    if (text.search(/\&colon/) >= 0){text = text.replace(/\&colon/g, ":");}
+    if (text.search(/\&semicol/) >= 0){text = text.replace(/\&semicol/g, ";");}
+    if (text.search(/\&dolar/) >= 0){text = text.replace(/\&dolar/g, "$");}
+    if (text.search(/\&at/) >= 0){text = text.replace(/\&at/g, "@");}
+    if (text.search(/\&percent/) >= 0){text = text.replace(/\&percent/g, "%");}
+    return text;
 }
 
 function process_3 (xml, div_id)
@@ -122,3 +123,38 @@ function process_1(xml)
         }
     }
 }
+
+function textScroll(text, widget, speed) // want to create a server script that creates *endofline* between news lines
+{
+    if (document.getElementById(widget)!=null)
+    {
+        if (text.search(/\*endofline\*/) >= 0){text = text.replace(/\*endofline\*/g, "        ");}
+        text = text_decode(text);
+        var news_text = document.createTextNode(text);
+        var screen = document.getElementById(widget);
+        var text_holder= document.createElement("div");
+        var screen_text = document.createElement("p");
+        
+        text_holder.id = "text-holder";
+        screen_text.appendChild(news_text);
+        text_holder.appendChild(screen_text);
+        
+        var screen_width = window.getComputedStyle(screen).width;
+        text_holder.style.left = screen_width;
+        screen.appendChild(text_holder);
+        var text_width = window.getComputedStyle(text_holder).width;
+        console.log("text_width: "+text_width+"; screen_width= "+screen_width+"; current position: "+text_holder.style.left);
+        
+       while (true)
+        {
+            text_holder.style.left = screen_width;
+            var i = screen_width.replace(/[a-zA-Z ]/g, "");
+            while ((text_holder.style.left).replace(/[a-zA-Z ]/g, "") >= -(text_width.replace(/[a-zA-Z ]/g, "")))
+            {
+                text_holder.style.left=i+"px";
+                i-=1;
+            }
+        }
+    }
+}
+    

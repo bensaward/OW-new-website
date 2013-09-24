@@ -1,128 +1,76 @@
-body
+#scroll-box
 {
-    background-image: url('../images/website-bg.png');
-    background-repeat: repeat-y;
-    background-size: cover;
-    background-position: top left;
-    background-attachment: fixed;
-}
-
-div.main_body
-{
-    width: 900px;
-    height: 1000px;
     position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-div.title_head
-{
+    top: 10px;
+    height: 100px;
     width: 100%;
-    height: 90px;
-    position: absolute;
-    top: 0px;
-    text-align: center;
-    font-size: larger;
-    color: #848484;
-    background-color: rgb(4, 9, 58);
+    background-color: rgba(0, 0, 0, 0.8);
+    background-image: linear-gradient(top, rgb(0,0,0) 0%, rgb(255,255,255) 3%, rgb(54,54,54) 5%, rgb(23,23,23) 10%, rgb(0,0,0) 50%, rgb(23,23,23) 90%, rgb(255,255,255) 100%);
+    background-image: -moz-linear-gradient(top, rgb(0,0,0) 0%, rgb(255,255,255) 3%, rgb(54,54,54) 5%, rgb(23,23,23) 10%, rgb(0,0,0) 50%, rgb(23,23,23) 90%, rgb(255,255,255) 100%);
+    background-image: -o-linear-gradient(top, rgb(0,0,0) 0%, rgb(255,255,255) 3%, rgb(54,54,54) 5%, rgb(23,23,23) 10%, rgb(0,0,0) 50%, rgb(23,23,23) 90%, rgb(255,255,255) 100%);
+    background-image: -webkit-linear-gradient(top, rgb(0,0,0) 0%, rgb(255,255,255) 3%, rgb(54,54,54) 5%, rgb(23,23,23) 10%, rgb(0,0,0) 50%, rgb(23,23,23) 90%, rgb(255,255,255) 100%);
+    background-image: -ms-linear-gradient(top, rgb(0,0,0) 0%, rgb(255,255,255) 3%, rgb(54,54,54) 5%, rgb(23,23,23) 10%, rgb(0,0,0) 50%, rgb(23,23,23) 90%, rgb(255,255,255) 100%);
+    color: #A9DE18;
+    overflow: visible;
 }
 
-div.sport_name
+#text-holder
 {
-    width: 20%;
-    height: 100%;
-    position: absolute;
-    top: 0px;
-    left: 80%;
-    text-align: center;
-    font-size: medium;
-    color: #848484;
-    background-color: rgb(4, 9, 58);
-}
-
-div.spacer1
-{
-    width: 100%;
-    height: 10px;
     position: relative;
-    top: 90px;
-    background-color: #000000;
+    height: 25%;
+    top: 33%;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: large;
 }
 
-#menu_bar
+.article
 {
-    width: 100%;
-    height: 36px;
-    background-color: #0B0B61;
-    position: absolute;
-    top: 100px;
-}
-
-#menu_bar table tr td a
-{
-    padding: 10px 45px 30px 10px;
-    color: #FFFFFF;
-    text-decoration: none;
-}
-table
-{
-    table-layout: fixed;
-    background-color: #000000;
-    position: absolute;
-    margin-left: 195px;
-    height: 30px;
-}
-
-td
-{
-    height: 30px;
-    background-color: #0B0B61;
-    text-align: center;
-    overflow: hidden;
-    width: auto;
-    font-size: medium;
-    color: #FFFFFF;
-}
-
-img.logo
-{
-    height: 240px;
-    width: 200px;
     position: relative;
-    left: -25px;
-    top: -10px;
-    z-index: 1;
+    top: 25px;
+    background-image: linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
+    background-image: -o-linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
+    background-image: -moz-linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
+    background-image: -webkit-linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
+    background-image: -ms-linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
+    background-image: -webkit-gradient(
+                                        linear,
+                                        left bottom,
+                                        left top,
+                                        color-stop(0, rgb(142,141,143)),
+                                        color-stop(0.1, rgb(247,249,250)));
+    text-align: center;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
 }
 
-div.image_box
+#logo-box
 {
-    position: absolute;
-    top: 136px;
-    width: 100%;
-    height: 600px;
+    position: relative;
+    top: 10px;
 }
 
-img.cover_img
+.logo-img
 {
-    width: 100%;
+    width: 50%;
     height: auto;
+    position: relative;
+    left: 25%;
 }
 
-div.spacer2
+#content-holder
 {
     width: 100%;
-    height: 10px;
-    background-color: #000000;
-    position: absolute;
-    top: 438px;
+    height: 60%;
+    position: relative;
+    top: 50px;
+    background-color: rgba(0,0,0,0.3);
 }
 
-div.content
+#article-holder
 {
-    width: 100%;
-    text-align: center;
-    position: absolute;
-    top: 448px;
+    width: 70%;
+    height: 100%;
+    position: relative;
+    left: 25%;
 }

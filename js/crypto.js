@@ -45,7 +45,7 @@ function authenticate(form)
                 var internal = hash_string+cnonce+snonce;
                 var result = CryptoJS.SHA256(internal);
                 result = result.toString(CryptoJS.enc.Hex);
-                console.log("result = "+result+" cnonce="+cnonce+" snonce="+snonce+" initial result="+hash_string);
+                //console.log("result = "+result+" cnonce="+cnonce+" snonce="+snonce+" initial result="+hash_string);
                 xml1.onreadystatechange = function()
                 {
                     if (xml1.readyState == 4 && xml1.status == 200)
@@ -72,6 +72,5 @@ function authenticate(form)
         }
         xml.open("GET","/cgi-bin/functions.cgi?session="+sessionID+"&request=snonce",true);
         xml.send();
-        return false;
     }
 }

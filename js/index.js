@@ -139,22 +139,27 @@ function textScroll(text, widget, speed) // want to create a server script that 
         screen_text.appendChild(news_text);
         text_holder.appendChild(screen_text);
         
-        var screen_width = window.getComputedStyle(screen).width;
-        text_holder.style.left = screen_width;
+        var screen_width = parseInt(window.getComputedStyle(screen).width.replace("px", ""));
+        text_holder.style.left = screen_width+"px";
         screen.appendChild(text_holder);
-        var text_width = window.getComputedStyle(text_holder).width;
-        console.log("text_width: "+text_width+"; screen_width= "+screen_width+"; current position: "+text_holder.style.left);
-        
-       while (true)
-        {
-            text_holder.style.left = screen_width;
-            var i = screen_width.replace(/[a-zA-Z ]/g, "");
-            while ((text_holder.style.left).replace(/[a-zA-Z ]/g, "") >= -(text_width.replace(/[a-zA-Z ]/g, "")))
-            {
-                text_holder.style.left=i+"px";
-                i-=1;
-            }
-        }
+        var text_width = parseInt(window.getComputedStyle(text_holder).width.replace("px", ""));
+        var i = screen_width;
+        console.log("screen_width="+screen_width+"; text_width="+text_width+"; i="+i+";");
+        setInterval(function()
+                    {
+                        var text_position = parseInt(text_holder.style.left.replace("px", ""));
+                        if ( text_position >= -text_width)
+                        {
+                            text_holder.style.left=i+"px";
+                            i--;
+                        }
+                        else
+                        {
+                            i = screen_width;
+                            text_holder.style.left=i+"px";
+                        }
+                        console.log("text_position="+text_position+";");
+                    }, 50);
     }
 }
     

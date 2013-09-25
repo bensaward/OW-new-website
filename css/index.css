@@ -11,7 +11,7 @@
     background-image: -webkit-linear-gradient(top, rgb(0,0,0) 0%, rgb(255,255,255) 3%, rgb(54,54,54) 5%, rgb(23,23,23) 10%, rgb(0,0,0) 50%, rgb(23,23,23) 90%, rgb(255,255,255) 100%);
     background-image: -ms-linear-gradient(top, rgb(0,0,0) 0%, rgb(255,255,255) 3%, rgb(54,54,54) 5%, rgb(23,23,23) 10%, rgb(0,0,0) 50%, rgb(23,23,23) 90%, rgb(255,255,255) 100%);
     color: #A9DE18;
-    overflow: visible;
+    overflow: hidden;
 }
 
 #text-holder

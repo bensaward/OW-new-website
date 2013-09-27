@@ -17,10 +17,8 @@
 #text-holder
 {
     position: relative;
-    height: 25%;
-    top: 33%;
-    margin-top: auto;
-    margin-bottom: auto;
+    height: 35px;
+    top: -25px;
     font-size: large;
 }
 
@@ -61,10 +59,14 @@
 #content-holder
 {
     width: 100%;
-    height: 60%;
+    height: 1200px;
     position: relative;
     top: 50px;
-    background-color: rgba(0,0,0,0.3);
+    background-image: linear-gradient(top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 10%);
+    background-image: -o-linear-gradient(top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 10%);
+    background-image: -moz-linear-gradient(top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 10%);
+    background-image: -webkit-linear-gradient(top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 10%);
+    background-image: -ms-linear-gradient(top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 10%);
 }
 
 #article-holder
@@ -72,5 +74,5 @@
     width: 70%;
     height: 100%;
     position: relative;
-    left: 25%;
+    left: 29%;
 }

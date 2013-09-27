@@ -14,7 +14,7 @@ function text_decode (text)
     return text;
 }
 
-function process_3 (xml, div_id)
+function process_3 (xml, div_id, holder)
 {
     if (xml.readyState == 4 && xml.status == 200)
     {
@@ -26,11 +26,11 @@ function process_3 (xml, div_id)
         paragraph.appendChild(text);
         div.attributes.class="article";
         div.appendChild(paragraph);
-        center_div.appendChild(div);
+        holder.appendChild(div);
     }
 }
 
-function process_2(xml, div_id, article_id)
+function process_2(xml, div_id, article_id, holder)
 {
     if (xml.status == 200 && xml.readyState == 4)
     {
@@ -43,12 +43,12 @@ function process_2(xml, div_id, article_id)
             a_div.appendChild(image);
         }
         request.open("GET","/cgi-bin/functions.cgi?request=get_content&article="+article_id,true);
-        request.onReadyStateChange = process_3(request, div_id);
+        request.onReadyStateChange = process_3(request, div_id, holder);
         request.send(null);
     }
 }
 
-function process_1(xml)
+function process_1(xml, holder)
 {
     if (xml.status == 200 && xml.readyState == 4)
     {
@@ -97,7 +97,7 @@ function process_1(xml)
                 case(0):
                 {
                     var xml1=new XMLHttpRequest;
-                    xml1.onreadystatechange = process_2(xml1, "a_div"+id[0], id[0]);
+                    xml1.onreadystatechange = process_2(xml1, "a_div"+id[0], id[0], holder);
                     xml1.open("GET","/cgi-bin/functions.cgi?request=get_image&id="+id[0],true);
                     xml1.send(null);
                     break;
@@ -105,7 +105,7 @@ function process_1(xml)
                 case(1):
                 {
                     var xml2=new XMLHttpRequest;
-                    xml2.onreadystatechange = process_2(xml2, "a_div"+id[1], id[1]);
+                    xml2.onreadystatechange = process_2(xml2, "a_div"+id[1], id[1], holder);
                     xml2.open("GET", "/cgi-bin/functions.cgi?request_image&id="+id[1],true);
                     xml2.send(null);
                     break;
@@ -113,13 +113,28 @@ function process_1(xml)
                 case(2):
                 {
                     var xml3 = new XMLHttpRequest;
-                    xml3.onreadystatechange = process_2(xml3, "a_div"+id[2], id[2]);
+                    xml3.onreadystatechange = process_2(xml3, "a_div"+id[2], id[2], holder);
                     xml3.open("GET", "/cgi-bin/functions.cgi?request_image&id="+id[2],true);
                     xml3.send(null);
                     break;
                 }
+                case(3):
+                {
+                    var xml4 = new XMLHttpRequest;
+                    xml4.onreadystatechange = process_2(xml4, "a_div"+id[3], id[3], holder);
+                    xml4.open("GET", "/cgi-bin/functions.cgi?request_image&id="+id[3],true);
+                    xml4.send(null);
+                    break;
+                }
+                case (4):
+                {
+                    var xml5 = new XMLHttpRequest;
+                    xml5.onreadystatechange = process_2(xml5, "a_div"+id[4], id[4], holder);
+                    xml5.open("GET", "/cgi-bin/functions.cgi?request_image&id="+id[4],true);
+                    xml5.send(null);
+                    break;
+                }
             }
-            
         }
     }
 }

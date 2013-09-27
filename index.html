@@ -28,32 +28,37 @@
             </div>
         </div>
         <div id="scroll-box">
-            <script type="text/javascript">
-                window.onload=function()
-                {
-                    console.log("script exec'd");
-                    var news = new XMLHttpRequest;
-                    news.open("GET","/cgi-bin/get_news.cgi",true);
-                    news.onreadystatechange=function()
+            <pre id="fixed-content">
+                <script type="text/javascript">
+                    window.onload=function()
                     {
-                        if (news.readyState == 4 && news.status == 200)
+                        console.log("script exec'd");
+                        var news = new XMLHttpRequest;
+                        news.open("GET","/cgi-bin/get_news.cgi",true);
+                        news.onreadystatechange=function()
                         {
-                            var text = news.responseText;
-                            textScroll(text, "scroll-box", 1);
-                        }
+                            if (news.readyState == 4 && news.status == 200)
+                            {
+                                var text = news.responseText;
+                                textScroll(text, "fixed-content", 1);
+                            }
+                        }  
+                        news.send(null);
                     }
-                    news.send(null);
-                }
-            </script>
+                </script>
+            </pre>
         </div>
         <div class="image_box" id="logo-box">
             <img src="images/logo.png" class="logo-img">
         </div>
         <div id="content-holder">
             <div id="article-holder">
-                <div class="article" id="a_div1">
-                    <h2>Welcome to our new website!</h2>
-                </div>
+                <script>
+                    var init_request = new XMLHttpRequest;
+                    var article_holder = document.getElementById("article-holder");
+                    init_request.open("GET","/cgi-bin/functions.cgi?request=get_title",true);
+                    init_request.onreadystatechange = process1(init_request, article_holder);
+                </script>
             </div>
         </div>
     </div>

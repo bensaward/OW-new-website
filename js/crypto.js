@@ -1,4 +1,4 @@
-
+var serverURL = "http://192.168.0.10"
 
 function authenticate(form)
 {
@@ -36,10 +36,10 @@ function authenticate(form)
         cnonce = cnonce.toString(CryptoJS.enc.Hex);            
         xml.onreadystatechange = function()
         {
-            console.log("XMLHttpRequest Changed state to "+xml.readyState+" and state"+xml.status);
+    //        console.log("XMLHttpRequest Changed state to "+xml.readyState+" and state"+xml.status);
             if (xml.readyState == 4 && xml.status == 200)
             {
-                console.log("snonce = "+xml.responseText);
+    //            console.log("snonce = "+xml.responseText);
                 snonce = xml.responseText;
                 var hash_string = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
                 var internal = hash_string+cnonce+snonce;
@@ -53,13 +53,14 @@ function authenticate(form)
                         var passfail = xml1.responseText;
                         var fail = passfail.search("fail");
                         console.log("fail position "+fail);
-                        if (fail >= 0)
+                        if (fail >= 0 && fail <= 10)
                         {
                             alert("Incorrect username or password!");
                         }
                         else
                         {
-                            return;
+                            console.log("reload triggered");
+                            location.reload();
                         }
                     }
                 }
@@ -72,5 +73,6 @@ function authenticate(form)
         }
         xml.open("GET","/cgi-bin/functions.cgi?session="+sessionID+"&request=snonce",true);
         xml.send();
+        return false;
     }
 }

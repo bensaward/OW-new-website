@@ -1,67 +1,31 @@
 function show_hide(element, button)
 {
-    if (document.contains(element) && document.contains(button))
+    var handle = document.getElementById(element);
+    var toggle = document.getElementById(button);
+    if (window.getComputedStyle(handle) && window.getComputedStyle(toggle))
     {
-        var handle = document.getElementById(element);
-        var toggle = document.getElementById(button);
-        if (window.getComputedStyle(handle))
+        var displayStyle = window.getComputedStyle(handle).display;
+        if (displayStyle != "none")
         {
-            var displayStyle = window.getComputedStyle(handle).getPropertyValue("display");
-            if (displayStyle != "none")
-            {
-                handle.style.display = "none";
-                toggle.attributes.onclick = "show_hide("+element+", "+button+")";
-                toggle.attributes.value = "Show";
-            }
-            else
-            {
-                handle.style.display = "block";
-                toggle.attributes.onclick = "show_hide("+element+", "+button+")";
-                toggle.attributes.value = "Hide";
-            }
+            handle.style.display = "none";
         }
         else
         {
-            var displayStyle = handle.currentStyle[display];
-            if (displayStyle != "none")
-            {
-                handle.style.display = "none";
-                toggle.attributes.onclick = "show_hide("+element+", "+button+")";
-                toggle.attributes.value = "Show";
-            }
-            else
-            {
-                handle.style.display = "block";
-                toggle.attributes.onclick = "show_hide("+element+", "+button+")";
-                toggle.attributes.value = "Hide";
-            }
+            handle.style.display = "block";
         }
+        toggle.attributes.onclick = "show_hide("+element+", "+button+")";
     }
-    else return;
-}
-
-function expand_update()
-{
-    var expandable = document.getElementById("update-form-handle");
-    expandable.style.display = "block";
 }
 
 function expand_manage()
 {
     var expandable = document.getElementById("manage-posts-handle"), xml, response;
-    var title = new array(), id = new array(), date_published = new array(), author = new array();
+    var title = new Array(), id = new Array(), date_published = new Array(), author = new Array();
     var date = new Date();
     var datenow = date.getTime(); // THIS IS IN MILLISECONDS.
     datenow = Math.floor(datenow/1000); // now in seconds.
     
-    if (window.XMLHTTPRequest)
-    {
-        xml = new XMLHttpRequest();
-    }
-    else
-    {
-        xml = new ActiveXObject("Microsoft.XMLHTTP"); //dont know why im doing these since HTML 5 isn't supported by legacy IE
-    }
+    xml = new XMLHttpRequest();
     xml.open("GET","../cgi-bin/functions.cgi?request=get_title&date="+datenow,true);
     xml.send();
     xml.onreadystatechange=function()
@@ -163,7 +127,7 @@ function expand_manage()
         }
     }
     var toggle_button = document.getElementById("show-button");
-    toggle_button.attributes.onclick="show_hide(manage-posts-handle, show-button)";
+    toggle_button.attributes.onclick="show_hide('manage-posts-handle', 'show-button')";
     expandable.style.display = "block";
 }
 

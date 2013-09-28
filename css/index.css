@@ -18,7 +18,7 @@
 {
     position: relative;
     height: 35px;
-    top: -25px;
+    top: -20px;
     font-size: large;
 }
 
@@ -75,4 +75,115 @@
     height: 100%;
     position: relative;
     left: 29%;
+}
+
+#comment
+{
+    position: relative;
+    top: -1180px;
+    width: 25%;
+    height: 400px;
+    left: 1%;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid #000;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    color: #bcbcbc;
+}
+
+#words1
+{
+    font-size: 25px;
+    color: #F2CE02;
+}
+
+#words2
+{
+    position: relative;
+    top: -45px;
+    left: 100px;
+}
+
+#words4
+{
+    position: relative;
+    top: -60px;
+}
+
+#words6
+{
+    font-size: 20px;
+    color: #F2CE02;
+    position: relative;
+    top: -80px;
+}
+
+#words7
+{
+    position: relative;
+    top: -120px;
+    left: 65px;
+}
+
+#words8
+{
+    position: relative;
+    top: -135px;
+}
+
+#words9
+{
+    position: relative;
+    top: -149px;
+}
+
+#words10
+{
+    position: relative;
+    top: -168px;
+    font-size: 18px;
+    color: #F2CE02;
+}
+
+#words11
+{
+    position: relative;
+    top: -187px;
+}
+
+#words12
+{
+    position: relative;
+    font-size: 20px;
+    top: -209px;
+    color: #F2CE02;
+}
+
+#words13
+{
+    position: relative;
+    top: -229px;
+}
+
+#words14
+{
+    position: relative;
+    top: -220px;
+    font-size: 18px;
+}
+
+#twitter-holder
+{
+    position: relative;
+    width: 225px;
+    left: 1%;
+    top: -1150px;
+    height: 600px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
 }

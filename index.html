@@ -57,8 +57,28 @@
                     var init_request = new XMLHttpRequest;
                     var article_holder = document.getElementById("article-holder");
                     init_request.open("GET","/cgi-bin/functions.cgi?request=get_title",true);
-                    init_request.onreadystatechange = process1(init_request, article_holder);
+                    init_request.onreadystatechange = process_1(init_request, article_holder);
+                    init_request.send();
                 </script>
+            </div>
+            <div id="comment">
+                <h2>A word from the President:</h2>
+                <p id="words1">Ultimate</p>
+                <p id="words2"> is a fun and</p>
+                <p id="words4">exhilarating sport. Ultimate at</p>
+                <p id="words6">Oxford</p>
+                <p id="words7">is all about raising</p>
+                <p id="words8">your game and having fun whilst</p>
+                <p id="words9">doing so. We have something for everyone, from the</p>
+                <p id="words10">college league and Cuppers</p>
+                <p id="words11">to representing the university at</p>
+                <p id="words12">Varsity and tournaments</p>
+                <p id="words13">Whatever your level of Ultimate check us out!</p>
+                <p id="words14">-- Ben "Cookie" Saward</p>
+            </div>
+            <div id="twitter-holder">
+                <a class="twitter-timeline" width="225px" height="600px" href="https://twitter.com/OxUniUltimate" data-widget-id="383754749528387584">Tweets by @OxUniUltimate</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
             </div>
         </div>
     </div>

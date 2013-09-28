@@ -10,7 +10,7 @@ use CGI::Carp qw(fatalsToBrowser warningsToBrowser);
 my $q = CGI->new;
 my $session = $q->cookie('SessionID');
 
-my $serverURL = "http://192.168.0.10";
+my $serverURL = "";
 
 sub print_login
 {

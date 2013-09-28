@@ -10,7 +10,7 @@ body
   color: #222;
   font-family: 'Droid Sans', arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: -moz-radial-gradient(farthest-side, transparent 90%, rgba(0, 0, 0, 0.2) 150%) white;
+  background: -moz-radial-gradient(farthest-side, transparent 90%, rgba(0, 0, 0, 0.6) 150%) white;
   background: -webkit-gradient(radial, center center, 500, center center, 1400, from(transparent), to(rgba(0, 0, 0, 0.6))) white;
   background-image: -webkit-gradient(radial, 50% 50%, 500, 50% 50%, 1400, from(transparent), to(rgba(0, 0, 0, 0.597656)));
   background-repeat-x: initial;

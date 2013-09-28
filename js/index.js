@@ -159,7 +159,7 @@ function textScroll(text, widget, speed) // want to create a server script that 
         screen.appendChild(text_holder);
         var text_width = parseInt(window.getComputedStyle(text_holder).width.replace("px", ""));
         var i = screen_width;
-        console.log("screen_width="+screen_width+"; text_width="+text_width+"; i="+i+";");
+        //console.log("screen_width="+screen_width+"; text_width="+text_width+"; i="+i+";");
         setInterval(function()
                     {
                         var text_position = parseInt(text_holder.style.left.replace("px", ""));
@@ -173,7 +173,7 @@ function textScroll(text, widget, speed) // want to create a server script that 
                             i = screen_width;
                             text_holder.style.left=i+"px";
                         }
-                        console.log("text_position="+text_position+";");
+                        //console.log("text_position="+text_position+";");
                     }, 50);
     }
 }

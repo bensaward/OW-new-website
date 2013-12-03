@@ -151,13 +151,8 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
                 );
                 
                 my $time = time;
+                $time=$time+(3*60*60);
                 my ($seconds, $minute, $hour, $day, $month, $year) = (gmtime($time))[0,1,2,3,4,5];
-                if ($hour >= 21)
-                {
-                    $day += 1;
-                }
-                
-                $hour = ($hour+3)%24;
                 $year += 1900;
                 $month += 1;
 
@@ -362,3 +357,10 @@ if ($reqfunct =~ /get_content/) ## content in db has "+" instead of " ". Will ne
     my $id = $query->param('id');
     get_content($id);
 }
+
+if ($reqfunct =~ /get_image/)
+{
+    my $id = $query->param('id');
+    get_image($id);
+}
+

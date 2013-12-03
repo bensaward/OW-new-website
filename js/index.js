@@ -1,5 +1,6 @@
 var center_div = document.getElementById("content");
 var init_request = new XMLHttpRequest;
+var GlobalExpandLinkCount = 0;
 
 function text_decode (text)
 {
@@ -14,27 +15,20 @@ function text_decode (text)
     return text;
 }
 
-function process_3 (xml, div_id, holder)
+function process_3 (response, div_id, holder)
 {
-    if (xml.readyState == 4 && xml.status == 200)
-    {
         var div = document.getElementById(div_id);
-        var content = xml.responseText;
-        text_decode(content);
+        text_decode(response);
         var paragraph = document.createElement("p");
-        var text = document.createTextNode(content);
+        var text = document.createTextNode(response);
         paragraph.appendChild(text);
         div.attributes.class="article";
         div.appendChild(paragraph);
         holder.appendChild(div);
-    }
 }
 
-function process_2(xml, div_id, article_id, holder)
+function process_2(response, div_id, article_id, holder)
 {
-    if (xml.status == 200 && xml.readyState == 4)
-    {
-        var response = xml.responseText;
         var image = document.createElement("img");
         if (response.search("none") < 0)
         {
@@ -45,20 +39,16 @@ function process_2(xml, div_id, article_id, holder)
         request.open("GET","/cgi-bin/functions.cgi?request=get_content&article="+article_id,true);
         request.onReadyStateChange = process_3(request, div_id, holder);
         request.send(null);
-    }
 }
 
-function process_1(xml, holder)
+function process_1(response, holder)
 {
-    if (xml.status == 200 && xml.readyState == 4)
-    {
-        var response = xml.responseText;
         var posts = response.slice(0,1);
         response = response.slice(2);
         var a, b, c, d, id = new Array(), author = new Array(), title = new Array(), date_pub = new Array();
         // format that is sent back is posts::id::title::date::author
         var i = 0;
-        while (i < 0)
+        while (i < posts)
         {
             a = response.search("::");
             id[i] = response.slice(0, a);
@@ -92,52 +82,19 @@ function process_1(xml, holder)
             header.appendChild(text);
             a_div.attributes.id="a_div_"+id[i];
             a_div.appendChild(header);
-            switch (i)
+            var xml = new XMLHttpRequest;
+            xml.onreadystatechange = function()
             {
-                case(0):
+                if (xml.readyState == 4 && xml.status == 200)
                 {
-                    var xml1=new XMLHttpRequest;
-                    xml1.onreadystatechange = process_2(xml1, "a_div"+id[0], id[0], holder);
-                    xml1.open("GET","/cgi-bin/functions.cgi?request=get_image&id="+id[0],true);
-                    xml1.send(null);
-                    break;
-                }
-                case(1):
-                {
-                    var xml2=new XMLHttpRequest;
-                    xml2.onreadystatechange = process_2(xml2, "a_div"+id[1], id[1], holder);
-                    xml2.open("GET", "/cgi-bin/functions.cgi?request_image&id="+id[1],true);
-                    xml2.send(null);
-                    break;
-                }
-                case(2):
-                {
-                    var xml3 = new XMLHttpRequest;
-                    xml3.onreadystatechange = process_2(xml3, "a_div"+id[2], id[2], holder);
-                    xml3.open("GET", "/cgi-bin/functions.cgi?request_image&id="+id[2],true);
-                    xml3.send(null);
-                    break;
-                }
-                case(3):
-                {
-                    var xml4 = new XMLHttpRequest;
-                    xml4.onreadystatechange = process_2(xml4, "a_div"+id[3], id[3], holder);
-                    xml4.open("GET", "/cgi-bin/functions.cgi?request_image&id="+id[3],true);
-                    xml4.send(null);
-                    break;
-                }
-                case (4):
-                {
-                    var xml5 = new XMLHttpRequest;
-                    xml5.onreadystatechange = process_2(xml5, "a_div"+id[4], id[4], holder);
-                    xml5.open("GET", "/cgi-bin/functions.cgi?request_image&id="+id[4],true);
-                    xml5.send(null);
-                    break;
+                    process_2(xml.responseText, "a_div"+id[i], id[i], holder);
                 }
             }
+            xml.open("GET","/cgi-bin/functions.cgi?request=get_image&id="+id[i],true);
+            xml.send();
         }
-    }
 }
+
 
 function textScroll(text, widget, speed) // want to create a server script that creates *endofline* between news lines
 {
@@ -177,4 +134,66 @@ function textScroll(text, widget, speed) // want to create a server script that 
                     }, 50);
     }
 }
-    
+
+function resizeDiv(parentDiv)
+{
+    var parentD = document.getElementByID(parentDiv);
+    var parentH = parseInt(window.getComputedStyle(parentD).offsetHeight.replace("px",""));
+    var para = parentD.getElementByTagName("p");
+    var paraH = parseInt(window.getComputedStyle(para).offsetHeight.replace("px",""));
+    var header = parentD.getElementByTagName("h2");
+    var headerH = parseInt(window.getComputedStyle(header).offsetHeight.replace("px",""));
+    var img = parentD.getElementByTagName("img");
+    var maxSize = parseInt(window.getComputedStyle(parentD).maxHeight.replace("px","")); //should this default to a set value???
+    if (img != null)
+    {
+        var imgH = parseInt(window.getComputedStyle(img).offsetHeight.replace("px",""));
+        if ((headerH+paraH+imgH) > maxSize)
+        {
+            parentD.style.overflow = "hidden";
+            var expandDiv = document.createElement("div");
+            var expandLink = document.createElement("pre");
+            var text = document.createTextNode("-- Show More --");
+            
+            expandLink.appendChild(text);
+            expandDiv.appendChild(expandLink);
+            expandDiv.attributes.onclick = "expandArticle("+parentDiv+");";
+            expandDiv.attributes.class = "expand_link";
+            expandDiv.attributes.id="expand_link"+GlobalExpandLinkCount;
+            GlobalExpandLinkCount++;
+            parentD.parentNode.insertBefore(expandDiv, parentD.nextSibling);
+            
+            var expandDivH = parseInt(window.getComputedStyle.getElementById("expand_link"+GlobalExpandLinkCount-1).offsetHeight.replace("px",""));
+            parentD.style.height = maxSize - expandDivH + "px";
+        }
+        else
+        {
+            parentD.style.height = headerH + paraH + imgH +"px";
+        }
+    }
+    else
+    {
+        if ((headerH+paraH)>maxSize)
+        {
+            parentD.style.overflow="hidden";
+            var expandDiv = document.createElement("div");
+            var expandLink = document.createElement("pre");
+            var text = document.createTextNode("-- Show More --");
+            expandLink.appendChild(text);
+            expandDiv.appendChild(expandLink);
+            
+            expandDiv.attributes.onclick = "expandArticle("+parentDiv+");";
+            expandDiv.attributes.class = "expand_link";
+            expandDiv.attributes.id="expand_link"+GlobalExpandLinkCount;
+            GlobalExpandLinkCount++;
+            parentD.parentNode.insertBefore(expandDiv, parentD.nextSibling);
+            
+            var expandDivH = parseInt(window.getComputedStyle.getElementById("expand_link"+GlobalExpandLinkCount-1).offsetHeight.replace("px",""));
+            parentD.style.height = maxSize - expandDivH + "px";
+        }
+        else
+        {
+            parentD.style.height = headerH + paraH +"px";
+        }
+    }
+}

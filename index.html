@@ -57,7 +57,13 @@
                     var init_request = new XMLHttpRequest;
                     var article_holder = document.getElementById("article-holder");
                     init_request.open("GET","/cgi-bin/functions.cgi?request=get_title",true);
-                    init_request.onreadystatechange = process_1(init_request, article_holder);
+                    init_request.onreadystatechange = function()
+                    {
+                        if (init_request.readyState == 4 && init_request.status == 200)
+                        {
+                            process_1(init_request.responseText, article_holder);
+                        }
+                    }
                     init_request.send();
                 </script>
             </div>
@@ -79,6 +85,9 @@
             <div id="twitter-holder">
                 <a class="twitter-timeline" width="225px" height="600px" href="https://twitter.com/OxUniUltimate" data-widget-id="383754749528387584">Tweets by @OxUniUltimate</a>
                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            </div>
+            <div id="fb-like-holder">
+                <iframe src="https://www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FOxfordUniUltimate&amp;width=225&amp;height=590&amp;colorscheme=dark&amp;show_faces=true&amp;header=true&amp;stream=true&amp;show_border=true" style="border:none; overflow:hidden; width:225px; height:590px;"></iframe>
             </div>
         </div>
     </div>

@@ -25,21 +25,22 @@
 .article
 {
     position: relative;
-    top: 25px;
+    top: 20px;
+    width: 98%;
+    max-height: 500px;
     background-image: linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
     background-image: -o-linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
     background-image: -moz-linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
     background-image: -webkit-linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
     background-image: -ms-linear-gradient(bottom, rgb(142,141,143) 0%, rgb(247,249,250) 10%);
-    background-image: -webkit-gradient(
-                                        linear,
-                                        left bottom,
-                                        left top,
-                                        color-stop(0, rgb(142,141,143)),
-                                        color-stop(0.1, rgb(247,249,250)));
-    text-align: center;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
+    border-radius: 10px;
+    border: 1px solid #000;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    overflow: hidden;
 }
 
 #logo-box
@@ -59,7 +60,7 @@
 #content-holder
 {
     width: 100%;
-    height: 1200px;
+    height: 2000px;
     position: relative;
     top: 50px;
     background-image: linear-gradient(top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 10%);
@@ -79,8 +80,8 @@
 
 #comment
 {
-    position: relative;
-    top: -1180px;
+    position: absolute;
+    top: 50px; 
     width: 25%;
     height: 400px;
     left: 1%;
@@ -178,12 +179,26 @@
 
 #twitter-holder
 {
-    position: relative;
+    position: absolute;
     width: 225px;
     left: 1%;
-    top: -1150px;
+    top: 500px; 
     height: 600px;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
 }
+
+#fb-like-holder
+{
+    position: absolute;
+    width: 225px;
+    height: 600px;
+    left: 1%;
+    top: 1150px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    background-color: #222; 
+}
+

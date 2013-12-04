@@ -60,7 +60,7 @@
 #content-holder
 {
     width: 100%;
-    height: 2000px;
+    height: 2200px;
     position: relative;
     top: 50px;
     background-image: linear-gradient(top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 10%);
@@ -76,24 +76,6 @@
     height: 100%;
     position: relative;
     left: 29%;
-}
-
-#comment
-{
-    position: absolute;
-    top: 50px; 
-    width: 25%;
-    height: 400px;
-    left: 1%;
-    background: rgba(0,0,0,0.7);
-    border: 1px solid #000;
-    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
-    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
-    -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    color: #bcbcbc;
 }
 
 #words1
@@ -177,12 +159,30 @@
     font-size: 18px;
 }
 
+#comment
+{
+    position: absolute;
+    top: 40px; 
+    width: 25%;
+    height: 400px;
+    left: 1%;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid #000;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    color: #bcbcbc;
+}
+
 #twitter-holder
 {
     position: absolute;
     width: 225px;
     left: 1%;
-    top: 500px; 
+    top: 460px; 
     height: 600px;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
@@ -195,10 +195,41 @@
     width: 225px;
     height: 600px;
     left: 1%;
-    top: 1150px;
+    top: 1080px;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     -webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     background-color: #222; 
 }
 
+.affiliates
+{
+    position: absolute;
+    width: 225px;
+    height: 500px;
+    top: 1700px;
+    left: 1%;
+}
+#ded-img
+{
+    position: absolute;
+    width: 225px;
+    height: 112px;
+    top: 0px;
+}
+
+#shark-img
+{
+    position: absolute;
+    width: 225px;
+    height: 112px;
+    top: 122px;
+}
+
+#buf-img
+{
+    position: absolute;
+    width: 225px;
+    height: 112px;
+    top: 244px;
+}

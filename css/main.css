@@ -46,7 +46,14 @@ body
     /* background-color: rgba(0, 0, 0, 0.6);
     opacity: 0.9; */
 }
-
+#ouuc-img
+{
+    position: absolute;
+    top: 2px;
+    left: 40px;
+    height: 36px;
+    width: 84px;
+}
 #menu-bar
 {
     width: 100%;

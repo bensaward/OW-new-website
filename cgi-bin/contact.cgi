@@ -2,19 +2,20 @@
 
 use warnings;
 use strict;
-use CGI::Carp;
+use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use File::Basename;
+use DBI;
 
 ###################################################################################################
 # The request comes in the form $url?data=$request ## mysql table for contacts:                   #
-#                                                  ##                                             #
+# (&position=$position)                            ##                                             #
 # Where $request can be:                           ## create table $DB_TABLE(                     #
 # - committee                                      ##       id int not null auto_increment,       #
 #       this fetches basic info on all committee   ##       name varchar(100) not null,           #
 #       members and image location                 ##       position varchar(100) not null,       #
 #                                                  ##       committee bool not null,              #
-# - $position (eg: president, captain, etc)        ##       college_capt bool not null,           #
+# - personal (eg: president, captain, etc)         ##       college_capt bool not null,           #
 #       retuns more info on a certain position     ##       email varchar(100) not null,          #
 #       eg roles in the club, small personal       ##       statement varchar(300),               #
 #       statement, etc.                            ##       role_info varchar(300),               #
@@ -71,7 +72,7 @@ sub print_committee
     print $ret_string;
 }
 
-sub print_position ## eg print_position
+sub print_personal ## eg print_personal($position)
 {
     my $position = $_[0];
     my $dbq_string = "SELECT * FROM $DB_TABLE WHERE position = '$position'";
@@ -88,4 +89,29 @@ sub print_position ## eg print_position
         ($name, $committee, $college_captain, $email, $statement, $role_info, $image_file, $college) = ($dbq->fetchrow_array)[1,3,4,5,6,7,8,9];
         print "1::$name::$position::$committee::$college_captain::$email::$statement::$role_info::$image_file::$college"
     }
+}
+
+if ($request =~ /personal/)
+{
+    my $position = $q->param("position");
+    print_personal($position);
+}
+
+elsif ($request =~ /committee/)
+{
+    print_committee();
+}
+
+elsif ($request =~ /college/)
+{
+    
+}
+
+else
+{
+    print "usage: contact.cgi?request=< committee || college || personal&position=<president|captain|...>>\n\n\n";
+    print "request=\n\n";
+    print "committee: returns basic info on committee members with images if possible.\n";
+    print "college: retuns basic info on college captains.\n";
+    print "personal&postion=...: matches a committee member from string following position= and provides all info in the table\n";
 }

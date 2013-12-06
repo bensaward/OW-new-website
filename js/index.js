@@ -22,7 +22,7 @@ function process_3 (response, div_id, holder)
         var paragraph = document.createElement("p");
         var text = document.createTextNode(response);
         paragraph.appendChild(text);
-        div.attributes.class="article";
+        div.class="article";
         div.appendChild(paragraph);
         holder.appendChild(div);
 }
@@ -32,7 +32,7 @@ function process_2(response, div_id, article_id, holder)
         var image = document.createElement("img");
         if (response.search("none") < 0)
         {
-            image.attributes.src = response;
+            image.src = response;
             var a_div = document.getElementById(div_id);
             a_div.appendChild(image);
         }
@@ -80,7 +80,7 @@ function process_1(response, holder)
         {
             var text = document.createTextNode(title[i]);
             header.appendChild(text);
-            a_div.attributes.id="a_div_"+id[i];
+            a_div.id="a_div_"+id[i];
             a_div.appendChild(header);
             var xml = new XMLHttpRequest;
             xml.onreadystatechange = function()
@@ -157,9 +157,9 @@ function resizeDiv(parentDiv)
             
             expandLink.appendChild(text);
             expandDiv.appendChild(expandLink);
-            expandDiv.attributes.onclick = "expandArticle("+parentDiv+");";
-            expandDiv.attributes.class = "expand_link";
-            expandDiv.attributes.id="expand_link"+GlobalExpandLinkCount;
+            expandDiv.onclick =function(){expandArticle(parentDiv)};
+            expandDiv.class = "expand_link";
+            expandDiv.id="expand_link"+GlobalExpandLinkCount;
             GlobalExpandLinkCount++;
             parentD.parentNode.insertBefore(expandDiv, parentD.nextSibling);
             
@@ -182,9 +182,9 @@ function resizeDiv(parentDiv)
             expandLink.appendChild(text);
             expandDiv.appendChild(expandLink);
             
-            expandDiv.attributes.onclick = "expandArticle("+parentDiv+");";
-            expandDiv.attributes.class = "expand_link";
-            expandDiv.attributes.id="expand_link"+GlobalExpandLinkCount;
+            expandDiv.onclick =function(){expandArticle(parentDiv)};
+            expandDiv.class = "expand_link";
+            expandDiv.id="expand_link"+GlobalExpandLinkCount;
             GlobalExpandLinkCount++;
             parentD.parentNode.insertBefore(expandDiv, parentD.nextSibling);
             

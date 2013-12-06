@@ -67,7 +67,7 @@ sub print_committee
     my $ret_string = $i+1;
     while ($a < $i)
     {
-        $ret_string = "::$ret_string::$name[$i]::$position[$i]::$email[$i]::$image_file[$i]"
+        $ret_string = "$ret_string::$name[$i]::$position[$i]::$email[$i]::$image_file[$i]"
     }
     print $ret_string;
 }
@@ -81,7 +81,7 @@ sub print_personal ## eg print_personal($position)
     $dbq->execute();
     if ($dbq->rows == 0)
     {
-        print "NULL::";
+        print "0";
     }
     
     else

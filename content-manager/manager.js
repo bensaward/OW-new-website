@@ -13,12 +13,14 @@ function show_hide(element, button)
         {
             handle.style.display = "block";
         }
-        toggle.attributes.onclick = "show_hide("+element+", "+button+")";
+        toggle.onclick =function(){show_hide(element, button)};
     }
 }
 
 function expand_manage()
 {
+    var toggle_button = document.getElementById("show-manage");
+    toggle_button.onclick=function(){show_hide('manage-posts-handle', 'show-manage')};
     var expandable = document.getElementById("manage-posts-handle"), xml, response;
     var title = new Array(), id = new Array(), date_published = new Array(), author = new Array();
     var date = new Date();
@@ -33,102 +35,107 @@ function expand_manage()
         if (xml.readyState == 4 && xml.status == 200)
         {
             response = xml.responseText;
-            if (response.search("Could not retrieve posts"))
+            if (response == 0)
             {
-                alert("There was an error in retrieving the posts from the Database!");
-                return;
+                expandable.style.height = "50px";
+                var text = document.createTextNode("Oops, it appears there are no posts in the database! Please Add a new post!");
+                var para = document.createElement("p");
+                para.appendChild(text);
+                expandable.appendChild(para);
+                expandable.style.display = "block";
             }
-            var post_count = responce.slice(0, 1);
-            response = response.slice(3);
-            
-            var i=0;
-            while (i < post_count)
+            else
             {
-                var a = response.search("::");
-                id[i] = response.slice(0, a);
-                response = response.slice(a+2);
-                
-                var b = response.search("::");
-                title[i] = response.slice(0 , b);
-                response = response.slice(b+2);
-                
-                var d = response.search("::");
-                date_published[i] = response.slice(0, d);
-                response = response.slice(d+2);
-                
-                if (i+1 == post_count)
+                var post_count = response.slice(0, 1);
+                response = response.slice(3);
+            
+                var i=0;
+                while (i < post_count)
                 {
-                    author[i] = response;
-                    break;
+                    var a = response.search("::");
+                    id[i] = response.slice(0, a);
+                    response = response.slice(a+2);
+                    
+                    var b = response.search("::");
+                    title[i] = response.slice(0 , b);
+                    response = response.slice(b+2);
+                    
+                    var d = response.search("::");
+                    date_published[i] = response.slice(0, d);
+                    response = response.slice(d+2);
+                    
+                    if (i+1 == post_count)
+                    {
+                        author[i] = response;
+                        break;
+                    }
+                    else
+                    {
+                        var c = response.search("::");
+                        author[i] = response.slice(0, c);
+                        response = response.slice(c+2);
+                        i++;
+                    }
                 }
-                else
-                {
-                    var c = response.search("::");
-                    author[i] = response.slice(0, c);
-                    response = response.slice(c+2);
-                    i++;
-                }
-            }
             
-            var contentManagerDiv = document.getElementById("manager-posts-handle");
+                var contentManagerDiv = document.getElementById("manager-posts-handle");
+                
+                var managerTableDiv = document.createElement("div");
+                var managerFormDeleteDiv = document.createElement("div");
+                var managerFormEditDiv = document.createElement("div");
+                var managerFormDiv = document.createElement("div");
+                
+                managerTableDiv.id = "manager-table";
+                managerFormDeleteDiv.id = "manager-form-delete";
+                managerFormEditDiv.id = "manager-form-edit";
+                managerFormDiv.id = "manager-form";
+                
+                var managerTable = document.createElement("table");
+                var td = document.createElement("td");
+                var tr = document.createElement("tr");
+                var button = document.createElement("button");
+                var edit_text = document.createTextNode("Edit");
+                var delete_text = document.createTextNode("Delete");
             
-            var managerTableDiv = document.createElement("div");
-            var managerFormDeleteDiv = document.createElement("div");
-            var managerFormEditDiv = document.createElement("div");
-            var managerFormDiv = document.createElement("div");
-            
-            managerTableDiv.attributes.id = "manager-table";
-            managerFormDeleteDiv.attributes.id = "manager-form-delete";
-            managerFormEditDiv.attributes.id = "manager-form-edit";
-            managerFormDiv.attributes.id = "manager-form";
-            
-            var managerTable = document.createElement("table");
-            var td = document.createElement("td");
-            var tr = document.createElement("tr");
-            var button = document.createElement("button");
-            var edit_text = document.createTextNode("Edit");
-            var delete_text = document.createTextNode("Delete");
-            
-            td.attributes.innerHTML="ID";
-            tr.appendChild(td);
-            td.a
-            ttributes.innerHTML="Title";
-            tr.appendChild(td);
-            td.attributes.innerHTML="Author";
-            tr.appendChild(td);
-            td.attributes.innerHTML="Date";
-            tr.appendChild(td);
-            managerTable.appendChild(tr);
-            
-            i=0;
-            while (i < post_count)
-            {
-                td.attributes.innerHTML=id[i];
+                td.innerHTML="ID";
                 tr.appendChild(td);
-                td.attributes.innerHTML=title[i];
+                td.a
+                ttributes.innerHTML="Title";
                 tr.appendChild(td);
-                td.attributes.innerHTML=author[i];
+                td.innerHTML="Author";
                 tr.appendChild(td);
-                td.attributes.innerHTML=date_published[i];
+                td.innerHTML="Date";
                 tr.appendChild(td);
                 managerTable.appendChild(tr);
-                
-                button.attributes.onclick="delete_post("+id[i]+")";
-                button.appendChild=(delete_text);
-                managerFormDeleteDiv.appendChild(button);
-                
-                button.attributes.onclick="edit_post("+id[i]+")";
-                button.appendChild(edit_text);
-                managerFormEditDiv.appendChild(button);
-                i++;
+            
+                i=0;
+                while (i < post_count)
+                {
+                    td.innerHTML=id[i];
+                    tr.appendChild(td);
+                    td.innerHTML=title[i];
+                    tr.appendChild(td);
+                    td.innerHTML=author[i];
+                    tr.appendChild(td);
+                    td.innerHTML=date_published[i];
+                    tr.appendChild(td);
+                    managerTable.appendChild(tr);
+                    
+                    button.onclick=function(){delete_post(id[i])};
+                    button.appendChild=(delete_text);
+                    managerFormDeleteDiv.appendChild(button);
+                    
+                    button.onclick=function(){edit_post(id[i])};
+                    button.appendChild(edit_text);
+                    managerFormEditDiv.appendChild(button);
+                    i++;
+                }
+                managerFormDiv.appendChild(managerFormDeleteDiv);
+                managerFormDiv.appendChild(managerFormEditDiv);
+                expandable.style.display = "block";
             }
-            managerFormDiv.appendChild(managerFormDeleteDiv);
-            managerFormDiv.appendChild(managerFormEditDiv);
         }
     }
-    var toggle_button = document.getElementById("show-button");
-    toggle_button.attributes.onclick="show_hide('manage-posts-handle', 'show-button')";
-    expandable.style.display = "block";
 }
 
 function delete_post(id)

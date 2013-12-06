@@ -4,7 +4,7 @@
 ###  Order of table is "id title pub_date author content image_src" ##
 ###  must be obeyed by all scripts                                  ##
 ######################################################################
-### create table $TNAMES_POSTS(                                     ##
+### create table $TNAME_POSTS(                                      ##
 ###     id int not null auto_increment,                             ##
 ###     title varchar(200) not null,                                ##
 ###     published date not null,                                    ##
@@ -12,6 +12,13 @@
 ###     content text not null,                                      ##
 ###     image varchar(100),                                         ##
 ###     primary key(id)                                             ##
+###     );                                                          ##
+######################################################################
+### create table $TNAME_PW(                                         ##
+###     id int not null auto_increment,                             ##
+###     user varchar(50) not null,                                  ##
+###     hash varchar(64) not null,                                  ##
+###     primary key(id),                                            ##
 ###     );                                                          ##
 ######################################################################
 
@@ -140,7 +147,7 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
             my $internal = "$db_hash$cnonce$snonce";
             $server_result=sha256_hex("$internal");
             
-            if ($hash == $server_result)
+            if ("$hash" == "$server_result")
             {
                 my $cookie1 = CGI::Cookie -> new (
                     -name=>'SessionID',
@@ -162,7 +169,7 @@ sub login  ## eg login(user, hash, SessionID, cnonce) -> returns: auth cookie or
                 close out_file;
                 
                 print "Status: 303 Other\n";
-                print "Location: $WEBADDRESS/cgi-bin/manager.cgi\n";
+                print "Location: http://$WEBADDRESS/cgi-bin/manager.cgi\n";
                 print "Set-Cookie: $cookie1\n";
                 print $q->header(-type=>'text/plain',);
             }
@@ -184,7 +191,7 @@ sub get_title   ## get_title(DATE) -> returns the 5 most recent article names.
     $month += 1;
     my $date =  "$year-$month-$day";
     my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
-    my $string = "SELECT * FROM $TNAME_POSTS WHERE published < '$date' ORDER BY date DESC LIMIT 5";
+    my $string = "SELECT * FROM $TNAME_POSTS WHERE published < '$date' ORDER BY published DESC LIMIT 5";
     my $dbq = $dbh->prepare($string);
     $dbq->execute();
     if ($dbq->rows == 0)

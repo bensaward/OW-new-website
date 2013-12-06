@@ -50,7 +50,7 @@ sub print_html
                 <h2>Manage Posts:</h2>
                 <input type="button" value="toggle" onclick="expand_manage()" id="show-manage" class="button-style">
             </div>
-            <div id="manage-posts-handle" class="internal-style">
+            <div id="manage-posts-handle" class="internal-style" style="display: none;">
             </div>
         </div>
     </div>

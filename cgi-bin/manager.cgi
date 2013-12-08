@@ -24,10 +24,10 @@ sub print_html
 </head>
 <body>
     <div id="wrap">
-        <h1>Content Manager</h1>
+        <h1 class="text">Content Manager</h1>
         <div class="update-form">
             <div id="update-header" class="header-style">
-                <h2>Create A New Article:</h2>
+                <h2 class="text">Create A New Article:</h2>
                 <input type="button" value="toggle" onclick="show_hide('update-form-handle', 'show-update');" id="show-update" class="button-style">
             </div>
             <div id="update-form-handle" style="display: none;" class="internal-style">
@@ -47,7 +47,7 @@ sub print_html
         </div>
         <div class="manage-posts">
             <div id="manage-header" class="header-style">
-                <h2>Manage Posts:</h2>
+                <h2 class="text">Manage Posts:</h2>
                 <input type="button" value="toggle" onclick="expand_manage()" id="show-manage" class="button-style">
             </div>
             <div id="manage-posts-handle" class="internal-style" style="display: none;">
@@ -63,7 +63,7 @@ if (!(defined($session)))
 {
 #    die "no session cookie recovered";
     print "Status: 303 Authorisation Required\n";
-    print "Location: $WEBADDRESS/cgi-bin/login.cgi\n";
+    print "Location: http://$WEBADDRESS/cgi-bin/login.cgi\n";
     print $response->header(-type=>'text/plain',);
     print "Not Authenticated";
 }
@@ -100,7 +100,7 @@ else
             {
 #                die "not authed";
                 print "Status: 303 Authorisation Required\n";
-                print "Location: $WEBADDRESS/cgi-bin/login.cgi\n";
+                print "Location: http://$WEBADDRESS/cgi-bin/login.cgi\n";
                 print $response->header(-type=>'text/plain',);
                 print "Not Authenticated";
             }

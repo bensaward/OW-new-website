@@ -23,17 +23,18 @@ use DBI();
 use Digest::SHA qw(sha256_hex);
 use CGI::Cookie;
 use File::Basename;
+use DateTime;
 
 ### CONFIG ###
 
-my $DBNAME = "";
-my $DBUNAME = "";
-my $DBPASS = "";
+my $DBNAME = "website";
+my $DBUNAME = "ben";
+my $DBPASS = "hellojade";
 my $DBHOST = "";
 my $TNAME_POSTS = "posts";   #table name for db containing hashes
-my $FILE_LOCATION = "";
-my $DOCUMENT_ROOT = "";
-my $WEBADDRESS = "";
+my $FILE_LOCATION = "images/articles";
+my $DOCUMENT_ROOT = "/var/www";
+my $WEBADDRESS = "10.25.227.3";
 
 ### ENG CFG ###
 
@@ -52,7 +53,7 @@ sub print_error
     <script type="text/javascript">
         setInterval(
             function(){
-                document.location("$WEBADDRESS/cgi-bin/manager.cgi");
+                document.location("http://$WEBADDRESS/cgi-bin/manager.cgi");
             },15000);
     </script>
     <style type="text/css">
@@ -65,7 +66,7 @@ sub print_error
 
 <body>
     <p><b>$message</b></p>
-    <p>(click <a href="$WEBADDRESS/cgi-bin/manager.cgi">here</a> if you are not automatically redirected)</p>
+    <p>(click <a href="http://$WEBADDRESS/cgi-bin/manager.cgi">here</a> if you are not automatically redirected)</p>
 </body>
 EOF
 }
@@ -83,7 +84,7 @@ sub print_success
     <script type="text/javascript">
         setInterval(
             function(){
-                document.location("$WEBADDRESS/cgi-bin/manager.cgi");
+                document.location("http://$WEBADDRESS/cgi-bin/manager.cgi");
             },10000);
     </script>
     <style type="text/css">
@@ -96,23 +97,25 @@ sub print_success
 
 <body>
     <p><b>Your post was added successfully! Thank you for contributing.</b></p>
-    <p>(click <a href="$WEBADDRESS/cgi-bin/manager.cgi">here</a> if you are not automatically redirected)</p>
+    <p>(click <a href="http://$WEBADDRESS/cgi-bin/manager.cgi">here</a> if you are not automatically redirected)</p>
 </body>
 EOF
 }
 
 sub authenticated ## authenticated(sessionid) -> returns 1 if authenticated, 0 if not
 {
+    my $authed;
     my ($session, $current_time) = ($_[0], time);
-    open (session_file, "$DOCUMENT_ROOT/data/sessions.txt") or die $!;
+    open (session_file, "$DOCUMENT_ROOT/data/authed.txt") or die $!;
     while (<session_file>)
     {
-        if ($_ =~ /$session/ && $_ =~ /authenticated/)
+        if ($_ =~ /$session/ && $_ =~ /authorised/)
         {
-            my @words = split(/ /);  ## format: sessionID=$session snonce=$snonce authenticated until $year/$month/$day $hour:$minute:$second
+            my @words = split(/ /);  ## format: sessionID=$session snonce=$snonce authorised until $year/$month/$day $hour:$minute:$second
             my ($exp_date, $exp_time) = (@words)[4,5];
             my ($exp_year, $exp_month, $exp_day) = (split(/\//, $exp_date))[0,1,2];
-            my ($exp_hour, $exp_minute, $exp_second) = (split(/:/))[0,1,2];
+            my ($exp_hour, $exp_minute, $exp_second) = (split(/:/, $exp_time))[0,1,2];
+
             my $expire_time = DateTime->new(
                 -year=>$exp_year,
                 -month=>$exp_month,
@@ -121,16 +124,13 @@ sub authenticated ## authenticated(sessionid) -> returns 1 if authenticated, 0 i
                 -minute=>$exp_minute,
                 -second=>$exp_second,
             );
-            if ($current_time < $exp_time)
+            if ($current_time < $expire_time)
             {
-                return 1;
-            }
-            else
-            {
-                return 0;
+                $authed=1;
             }
         }
     }
+    return $authed
 }
 
 sub upload_image ## upload_image(filename, db_id, file_handle)
@@ -216,22 +216,23 @@ sub add_content ## add_content(title, date, author, content, image_src, filehand
         print_error("Ooops...","There was a problem adding the post to the database. Please try again later.");
         die "Content upload check failed, stopped";
     }
-    else
-    {
-        $id = $dbhandle->fetchrow_array();    
-    }
     if (defined($image_src) && defined($filehandle))
     {
         ## upload_image(filename, db_id, file_handle)
         upload_image($image_src, $id, $filehandle);
-    } 
+    }
+    else
+    {
+        print_success;
+    }
 }
 
 ### END SUBS ###
 
 my $query = CGI->new;
 my $safe_chars = "a-zA-Z0-9.-_";
-my ($session, $title, $date, $author, $content, $filename, $filehandle) = ($query->param('session'), $query->param('title'), time, $query->param('author'), $query->param('content'), $query->param('image_src'), $query->upload('image_src'));
+my %cookies = CGI::Cookie->fetch;
+my ($session, $title, $date, $author, $content, $filename, $filehandle) = ($cookies{'SessionID'}->value, $query->param('title'), time, $query->param('author'), $query->param('content'), $query->param('image_src'), $query->upload('image_src'));
 
 if (authenticated($session) == 1 && defined($filehandle))
 {
@@ -246,7 +247,7 @@ elsif (authenticated($session) == 1 && !(defined($filehandle)))
 {
     add_content($title, $date, $author, $content);    
 }
-elsif (autheticated($session) == 0)
+elsif (authenticated($session) == 0)
 {
     print_error("Ooops...","You are not logged in, please login...");
     die "Could not add content, session=$session is not authenticated. Stopped";

@@ -27,14 +27,14 @@ use DateTime;
 
 ### CONFIG ###
 
-my $DBNAME = "website";
-my $DBUNAME = "ben";
-my $DBPASS = "hellojade";
+my $DBNAME = "";
+my $DBUNAME = "";
+my $DBPASS = "";
 my $DBHOST = "";
 my $TNAME_POSTS = "posts";   #table name for db containing hashes
 my $FILE_LOCATION = "images/articles";
 my $DOCUMENT_ROOT = "/var/www";
-my $WEBADDRESS = "10.25.227.3";
+my $WEBADDRESS = "";
 
 ### ENG CFG ###
 

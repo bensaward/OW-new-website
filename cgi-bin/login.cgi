@@ -44,7 +44,7 @@ EOF
 sub print_manager
 {
     print "Status: 303 Authorised\n";
-    print "Location: $serverURL/cgi-bin/manager.cgi\n";
+    print "Location: http://$serverURL/cgi-bin/manager.cgi\n";
     print $q->header(-type=>"text/html",);
 }
 if (!(defined($session)))

@@ -32,8 +32,8 @@ my $DBUNAME = "";
 my $DBPASS = "";
 my $DBHOST = "";
 my $TNAME_POSTS = "posts";   #table name for db containing hashes
-my $FILE_LOCATION = "images/articles";
-my $DOCUMENT_ROOT = "/var/www";
+my $FILE_LOCATION = "";
+my $DOCUMENT_ROOT = "";
 my $WEBADDRESS = "";
 
 ### ENG CFG ###
@@ -104,8 +104,7 @@ EOF
 
 sub authenticated ## authenticated(sessionid) -> returns 1 if authenticated, 0 if not
 {
-    my $authed;
-    my ($session, $current_time) = ($_[0], time);
+    my ($session, $current_time, $authed) = ($_[0], DateTime->now->epoch(),0);
     open (session_file, "$DOCUMENT_ROOT/data/authed.txt") or die $!;
     while (<session_file>)
     {
@@ -117,14 +116,14 @@ sub authenticated ## authenticated(sessionid) -> returns 1 if authenticated, 0 i
             my ($exp_hour, $exp_minute, $exp_second) = (split(/:/, $exp_time))[0,1,2];
 
             my $expire_time = DateTime->new(
-                -year=>$exp_year,
-                -month=>$exp_month,
-                -day=>$exp_day,
-                -hour=>$exp_hour,
-                -minute=>$exp_minute,
-                -second=>$exp_second,
+                year=>$exp_year,
+                month=>$exp_month,
+                day=>$exp_day,
+                hour=>$exp_hour,
+                minute=>$exp_minute,
+                second=>$exp_second,
             );
-            if ($current_time < $expire_time)
+            if ($current_time < $expire_time->epoch())
             {
                 $authed=1;
             }
@@ -252,7 +251,7 @@ elsif (authenticated($session) == 0)
     print_error("Ooops...","You are not logged in, please login...");
     die "Could not add content, session=$session is not authenticated. Stopped";
 }
-default
+else
 {
     print_error("Ooops...","Something went wrong, not sure what...");
     die "Default action triggered, stopped";

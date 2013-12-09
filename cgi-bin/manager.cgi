@@ -37,7 +37,7 @@ sub print_html
                     <label for="author">Author:</label>
                     <input type"text" id="author" name="author" class="add-style">
                     <label for="body">Content:</label>
-                    <textarea id="body" name="body">What do you want to write about?</textarea>
+                    <textarea id="body" name="content">What do you want to write about?</textarea>
                     <label for="image_src" id="src-label">Image (optional):</label>
                     <input type="file" id="image_src" name="image_src" class="add-style-no-border">
                     <input type="hidden" id="session" value="$session">

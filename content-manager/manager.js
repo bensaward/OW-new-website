@@ -28,7 +28,7 @@ function expand_manage()
     datenow = Math.floor(datenow/1000); // now in seconds.
     
     xml = new XMLHttpRequest();
-    xml.open("GET","../cgi-bin/functions.cgi?request=get_title&date="+datenow,true);
+    xml.open("GET","../cgi-bin/posts.cgi?request=get_title&date="+datenow,true);
     xml.send();
     xml.onreadystatechange=function()
     {
@@ -149,7 +149,7 @@ function delete_post(id)
     {
         xml = new ActiveXObject("Microsoft.XMLHTTP"); //again no html5 support in legacy IE...
     }
-    xml.open("GET","../cgi-bin/functions.cgi?function=delete_post&id="+id,true);
+    xml.open("GET","../cgi-bin/posts.cgi?function=delete_post&id="+id,true);
     xml.send();
     xml.onreadystatechange = function ()
     {

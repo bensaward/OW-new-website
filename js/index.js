@@ -36,7 +36,7 @@ function process_2(response, div_id, article_id, holder)
             var a_div = document.getElementById(div_id);
             a_div.appendChild(image);
         }
-        request.open("GET","/cgi-bin/functions.cgi?request=get_content&article="+article_id,true);
+        request.open("GET","/cgi-bin/posts.cgi?request=get_content&article="+article_id,true);
         request.onReadyStateChange = process_3(request, div_id, holder);
         request.send(null);
 }
@@ -90,7 +90,7 @@ function process_1(response, holder)
                     process_2(xml.responseText, "a_div"+id[i], id[i], holder);
                 }
             }
-            xml.open("GET","/cgi-bin/functions.cgi?request=get_image&id="+id[i],true);
+            xml.open("GET","/cgi-bin/posts.cgi?request=get_image&id="+id[i],true);
             xml.send();
         }
 }

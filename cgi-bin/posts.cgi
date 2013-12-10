@@ -157,6 +157,7 @@ sub get_content ## get_content(ID) ->  returns the content of an article as a st
     else
     {
         $content = $dbq->fetchrow_array();
+        $content = replace_unsafe($content, "decode");
         print "$content";
     }
 }

@@ -38,8 +38,6 @@ my $DBUNAME = "";
 my $DBPASS = "";
 my $DBHOST = "";
 my $TNAME_PW = "login";  #table name for users and password hashes
-my $FILE_LOCATION = "";
-my $DOCUMENT_ROOT = "";
 my $WEBADDRESS = "";
 
 ### ENG CFG ###

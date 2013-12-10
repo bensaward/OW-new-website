@@ -132,6 +132,32 @@ sub authenticated ## authenticated(sessionid) -> returns 1 if authenticated, 0 i
     return $authed
 }
 
+sub replace_unsafe ## replace_unsafe(string, encode|decode)
+{
+    my ($string,$code) = @_[0,1];
+    if ($code =~ /encode/)
+    {
+        if ($string =~ /\'/){$string =~ s/\'/\&apost/g;}
+        if ($string =~ /\"/){$string =~ s/\"/\&quot/g;}
+        if ($string =~ /\:/){$string =~ s/\:/&colon/g;}
+        if ($string =~ /\;/){$string =~ s/\;/&semicol/g;}
+        if ($string =~ /\$/){$string =~ s/\$/&dolar/g;}
+        if ($string =~ /\@/){$string =~ s/\@/&at/g;}
+        if ($string =~ /\%/){$string =~ s/\%/&percent/g;}
+    }
+    else
+    {
+        if ($string =~ /&apost/){$string =~ s/&apost/\'/g;}
+        if ($string =~ /&quot/){$string =~ s/&quot/\"/g;}
+        if ($string =~ /&colon/){$string =~ s/&colon/\:/g}
+        if ($string =~ /&semicol/){$string =~ s/&semicol/\;/g;}
+        if ($string =~ /&dolar/){$string =~ s/&dolar/\$/g;}
+        if ($string =~ /\&at/){$string =~ s/&at/\@/g;}
+        if ($string =~ /&percent/){$string =~ s/&percent/\%/}
+    }
+    return $string;
+}
+
 sub upload_image ## upload_image(filename, db_id, file_handle)
 {    
     my ($filename, $db_id, $file_handle, $referred) = @_[0,1,2,3];
@@ -167,39 +193,14 @@ sub upload_image ## upload_image(filename, db_id, file_handle)
     }
 }
 
-sub replace_unsafe ## replace_unsafe(string, encode|decode)
-{
-    my ($string,$code) = @_[0,1];
-    if ($code =~ /encode/)
-    {
-        if ($string =~ /\'/){$string =~ s/\'/\&apost/g;}
-        if ($string =~ /\"/){$string =~ s/\"/\&quot/g;}
-        if ($string =~ /\:/){$string =~ s/\:/&colon/g;}
-        if ($string =~ /\;/){$string =~ s/\;/&semicol/g;}
-        if ($string =~ /\$/){$string =~ s/\$/&dolar/g;}
-        if ($string =~ /\@/){$string =~ s/\@/&at/g;}
-        if ($string =~ /\%/){$string =~ s/\%/&percent/g;}
-    }
-    else
-    {
-        if ($string =~ /&apost/){$string =~ s/&apost/\'/g;}
-        if ($string =~ /&quot/){$string =~ s/&quot/\"/g;}
-        if ($string =~ /&colon/){$string =~ s/&colon/\:/g}
-        if ($string =~ /&semicol/){$string =~ s/&semicol/\;/g;}
-        if ($string =~ /&dolar/){$string =~ s/&dolar/\$/g;}
-        if ($string =~ /\&at/){$string =~ s/&at/\@/g;}
-        if ($string =~ /&percent/){$string =~ s/&percent/\%/}
-    }
-}
-
 sub add_content ## add_content(title, date, author, content, image_src, filehandle) -> returns true if content is added successfully, error if not.
 {
     my ($title, $date, $author, $content, $image_src, $filehandle) = @_[0,1,2,3,4,5];
     my ($day, $month, $year) = (gmtime($date))[3,4,5];
     $year = $year + 1900;
-    replace_unsafe($content, "encode");
-    replace_unsafe($author, "encode");
-    replace_unsafe($title, "encode");
+    $content = replace_unsafe($content, "encode");
+    $author = replace_unsafe($author, "encode");
+    $title = replace_unsafe($title, "encode");
     
     my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
     my $dbquery = "INSERT INTO $TNAME_POSTS (title, published, author, content) VALUES ('$title', '$year-$month-$day', '$author', '$content')";

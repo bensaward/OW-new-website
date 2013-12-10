@@ -57,7 +57,7 @@
                 <script>
                     var init_request = new XMLHttpRequest;
                     var article_holder = document.getElementById("article-holder");
-                    init_request.open("GET","/cgi-bin/functions.cgi?request=get_title",true);
+                    init_request.open("GET","/cgi-bin/posts.cgi?request=get_title",true);
                     init_request.onreadystatechange = function()
                     {
                         if (init_request.readyState == 4 && init_request.status == 200)

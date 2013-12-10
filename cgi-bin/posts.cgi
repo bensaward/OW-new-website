@@ -14,9 +14,8 @@ my $DBUNAME = "";
 my $DBPASS = "";
 my $DBHOST = "";
 my $TNAME_POSTS = "posts";   #table name for db containing hashes
-my $FILE_LOCATION = "";
 my $DOCUMENT_ROOT = "";
-my $WEBADDRESS = "";
+
 
 ### END CONFIG ###
 
@@ -44,6 +43,7 @@ sub replace_unsafe ## replace_unsafe(string, encode|decode)
         if ($string =~ /\&at/){$string =~ s/&at/\@/g;}
         if ($string =~ /&percent/){$string =~ s/&percent/\%/}
     }
+    return $string;
 }
 
 sub authenticated ## authenticated(sessionid) -> returns 1 if authenticated, 0 if not
@@ -84,36 +84,41 @@ sub get_title   ## get_title(DATE) -> returns the 5 most recent article names.
     $month += 1;
     my $date =  "$year-$month-$day";
     my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
-    my $string = "SELECT * FROM $TNAME_POSTS WHERE published < '$date' ORDER BY published DESC LIMIT 5";
+    my $string = "SELECT * FROM $TNAME_POSTS WHERE published < \'$date\' ORDER BY published DESC LIMIT 5";
     my $dbq = $dbh->prepare($string);
     $dbq->execute();
-    if ($dbq->rows == 0)
+    if ($dbq->rows > 0)
+    {
+        while (@results = $dbq->fetchrow_array())
+        {
+            $id[$count]=$results[0];
+            $name[$count]=$results[1];
+            $published[$count]=$results[2];
+            $author[$count]=$results[3];
+            
+            $author[$count]=replace_unsafe($author[$count], "decode");
+            $name[$count]=replace_unsafe($name[$count], "decode");
+            $count++;
+        }
+        my ($i, $post_count) = (0, $count);
+        my $response = "$post_count\::$id[$i]::$name[$i]::$published[$i]::$author[$i]";
+        $i++;
+        while ($i < $count)
+        {
+            $response = "$response::$id[$i]::$name[$i]::$published[$i]::$author[$i]";
+            $i++;
+        }
+        my $q = CGI->new;   
+        print $q->header(-type=>'text/plain',);
+        print "$response";
+    }
+    else
     {
         my $q = CGI->new;   
         print $q->header(-type=>'text/plain',);
         print "0";
         die "could not retrieve posts before $day-$month-$year, stopped";
-    }
-    else
-    {
-        while (@results = dbq->fetchrow_array())
-        {
-            $id[$count]=$results[0];
-            $name[$count]=replace_unsafe($results[1], "decode");
-            $published[$count]=$results[2];
-            $author[$count]=replace_unsafe($results[3], "decode");
-            $count+=1;
-        }
-        my ($i, $string) = (0, $count+1);
-        while ($i < $count)
-        {
-            $string = "$string::$id[$i]::$name[$i]::$published[$i]::$author[$i]";
-            $i++;
-        }
-        my $q = CGI->new;   
-        print $q->header(-type=>'text/plain',);
-        print "$string";
-    }
+    }    
 }
 
 sub delete_post ## delete_post(ID) -> deletes post with said ID in the database : returns "success" or "error"
@@ -194,11 +199,18 @@ my $query = CGI->new;
 my ($reqfunct) = ($query->param('request'));
 if ($reqfunct =~ /get_title/)
 {
-    my $date = $query->param('date');
-    get_title($date);
+    if (defined($query->param('date')))
+    {
+        my $date = $query->param('date');
+        get_title($date);
+    }
+    else
+    {
+        get_title(time);
+    }
 }
 
-if ($reqfunct =~ /delete_post/)
+elsif ($reqfunct =~ /delete_post/)
 {
     my ($id, $session) = ($query->param('id'), $query->param('session'));
     if (authenticated($session) == 1)
@@ -212,13 +224,13 @@ if ($reqfunct =~ /delete_post/)
     }
 }
 
-if ($reqfunct =~ /get_content/)
+elsif ($reqfunct =~ /get_content/)
 {
     my $id = $query->param('id');
     get_content($id);
 }
 
-if ($reqfunct =~ /get_image/)
+elsif ($reqfunct =~ /get_image/)
 {
     my $id = $query->param('id');
     get_image($id);

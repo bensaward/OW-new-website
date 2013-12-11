@@ -146,7 +146,7 @@ sub delete_post ## delete_post(ID) -> deletes post with said ID in the database 
 
 sub get_content ## get_content(ID) ->  returns the content of an article as a string... returns "fail" on fail
 {
-    my $id = $_;
+    my $id = $_[0];
     my $content;
     my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
     my $dbquery = "SELECT content FROM $TNAME_POSTS WHERE id = $id";
@@ -169,10 +169,10 @@ sub get_content ## get_content(ID) ->  returns the content of an article as a st
 
 sub get_image ## get_image(ID) -> returns a string containing the src of an image... returns "none" on fail
 {
-    my $id = $_;
+    my $id = $_[0];
     my $image_src;
     my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME, $DBPASS, {'RaiseError' => 1});
-    my $query = "SELECT image FROM $TNAME_POSTS where id=$id";
+    my $query = "SELECT image FROM $TNAME_POSTS where id=\'$id\'";
     my $dbq = $dbh->prepare($query);
     my $q = CGI->new;
     print $q->header(-type=>'text/plain');
@@ -185,7 +185,7 @@ sub get_image ## get_image(ID) -> returns a string containing the src of an imag
     else
     {
         $image_src=$dbq->fetchrow_array();
-        if (!(defined($image_src)))
+        if ("$image_src" == "" || $image_src =~ /NULL/)
         {
             $image_src="none";
         }

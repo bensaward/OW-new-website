@@ -2,23 +2,9 @@ var center_div = document.getElementById("content");
 var init_request = new XMLHttpRequest;
 var GlobalExpandLinkCount = 0;
 
-function text_decode (text)
-{
-    if (text.search(/\+/) >= 0){text = text.replace(/\+/g, " ");}
-    if (text.search(/\&quot/ ) >= 0){text = text.replace(/\&quot/g, "\"");}
-    if (text.search(/\&apost/) >= 0){text = text.replace(/\&apost/g, "'");}
-    if (text.search(/\&colon/) >= 0){text = text.replace(/\&colon/g, ":");}
-    if (text.search(/\&semicol/) >= 0){text = text.replace(/\&semicol/g, ";");}
-    if (text.search(/\&dolar/) >= 0){text = text.replace(/\&dolar/g, "$");}
-    if (text.search(/\&at/) >= 0){text = text.replace(/\&at/g, "@");}
-    if (text.search(/\&percent/) >= 0){text = text.replace(/\&percent/g, "%");}
-    return text;
-}
-
 function process_3 (response, div_id, holder)
 {
         var div = document.getElementById(div_id);
-        text_decode(response);
         var paragraph = document.createElement("p");
         var text = document.createTextNode(response);
         paragraph.appendChild(text);
@@ -83,7 +69,7 @@ function process_1(response, holder)
             a_div.id="a_div_"+id[i];
             a_div.appendChild(header);
             var xml = new XMLHttpRequest;
-            xml.onreadystatechange = function()
+            xml.onReadyStateChange = function()
             {
                 if (xml.readyState == 4 && xml.status == 200)
                 {
@@ -101,7 +87,6 @@ function textScroll(text, widget, speed) // want to create a server script that 
     if (document.getElementById(widget)!=null)
     {
         if (text.search(/\*endofline\*/) >= 0){text = text.replace(/\*endofline\*/g, "        ");}
-        text = text_decode(text);
         var news_text = document.createTextNode(text);
         var screen = document.getElementById(widget);
         var text_holder= document.createElement("div");

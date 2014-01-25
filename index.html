@@ -54,19 +54,6 @@
         </div>
         <div id="content-holder">
             <div id="article-holder">
-                <script>
-                    var init_request = new XMLHttpRequest;
-                    var article_holder = document.getElementById("article-holder");
-                    init_request.open("GET","/cgi-bin/posts.cgi?request=get_title",true);
-                    init_request.onreadystatechange = function()
-                    {
-                        if (init_request.readyState == 4 && init_request.status == 200)
-                        {
-                            process_1(init_request.responseText, article_holder);
-                        }
-                    }
-                    init_request.send();
-                </script>
             </div>
             <div id="comment">
                 <h2>A word from the President:</h2>

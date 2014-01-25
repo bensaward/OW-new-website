@@ -1,87 +1,96 @@
+/* create table $TNAME_POSTS(                                      
+*     id int not null auto_increment,
+*     title varchar(200) not null,                                
+*     published date not null,                                    
+*     author varchar(100) not null,                               
+*     content text not null,                                      
+*     image varchar(100),                                         
+*     primary key(id)                                             
+*     );               
+*/
+
+// global vars
+
 var center_div = document.getElementById("content");
 var init_request = new XMLHttpRequest;
 var GlobalExpandLinkCount = 0;
 
-function process_3 (response, div_id, holder)
+// functions
+function proccess(responseText) // cgi-bin outputs table format in top of the file
 {
-        var div = document.getElementById(div_id);
-        var paragraph = document.createElement("p");
-        var text = document.createTextNode(response);
-        paragraph.appendChild(text);
-        div.class="article";
-        div.appendChild(paragraph);
-        holder.appendChild(div);
-}
-
-function process_2(response, div_id, article_id, holder)
-{
-        var image = document.createElement("img");
-        if (response.search("none") < 0)
+    if (responseText == "NULL")
+    {
+        console.log("[Error] - no posts found in the database");
+    }
+    else
+    {
+        var postCount = responseText[0];
+        responseText = responseText.slice(3);
+        var id = new Array, title = new Array, published = new Array, author = new Array, content = new Array, image = new Array;
+        var clone = responseText;
+        var location = new Array;
+        for (var i = 0; clone.search("::")>=-1; i++) // this will not catch the last image section returned to us
         {
-            image.src = response;
-            var a_div = document.getElementById(div_id);
-            a_div.appendChild(image);
+            location[i]=clone.search("::");
+            clone=clone.slice(location[i]+2);
+            if (i>0)
+            {
+                location[i]=location[i]+location[i-1]+2; // correction for chopping out everything before the "::" we already found
+            }
         }
-        request.open("GET","/cgi-bin/posts.cgi?request=get_content&article="+article_id,true);
-        request.onReadyStateChange = process_3(request, div_id, holder);
-        request.send(null);
-}
-
-function process_1(response, holder)
-{
-        var posts = response.slice(0,1);
-        response = response.slice(2);
-        var a, b, c, d, id = new Array(), author = new Array(), title = new Array(), date_pub = new Array();
-        // format that is sent back is posts::id::title::date::author
-        var i = 0;
-        while (i < posts)
+        
+        for (var i = 0; i<postCount; i++)
         {
-            a = response.search("::");
-            id[i] = response.slice(0, a);
-            response = response.slice(a+2);
-            
-            b = response.search("::");
-            title[i] = response.slice(0, b);
-            response = response.slice(b+2);
-            
-            c = response.search("::");
-            date_pub[i] = response.slice(0, c);
-            response = response.slice(c+2);
-            
-            if (i == posts-1){author[i]=response;}
+            id[i] = responseText.slice(0,location[5*i]);
+            title[i] = responseText.slice(location[5*i]+2, location[(5*i)+1]);
+            published[i] = responseText.slice(location[(5*i)+1]+2, location[(5*i)+2]);
+            author[i] = responseText.slice(location[(5*i)+2]+2, location[(5*i)+3]);
+            content[i] = responseText.slice(location[(5*i)+3]+2, location[(5*i)+4]);
+            if (i !== postCount-1) {
+                image[i] = responseText.slice(location[(5*i)+4]+2, location[(5*i)+5]);
+            }
             else
             {
-                d = response.search("::");
-                author[i] = response.slice (0, d);
-                response = response.slice(d+2);
+                image[i] = responseText;
             }
-            i++;
         }
-        i=0;
-        var a_div = document.createElement("div");
-        var t_div = document.createElement("div");
-        var p_div = document.createElement("div");
-        var header = document.createElement("H2");
-        while (i < posts)
+        // proccessing done, add to page
+        
+        var articleParentDiv = document.getElementById("article-holder");
+        var articleHolder = new Array, header = new Array, imageBox = new Array, articleText = new Array, footer = new Array;
+        for (i=0; i<postCount; i++)
         {
-            var text = document.createTextNode(title[i]);
-            header.appendChild(text);
-            a_div.id="a_div_"+id[i];
-            a_div.appendChild(header);
-            var xml = new XMLHttpRequest;
-            xml.onReadyStateChange = function()
+            articleHolder[i] = document.createElement("div");
+            articleHolder[i].id = "articleID_"+id[i];
+            header[i] = document.createElement("h2");
+            header[i].className = "article-header";
+            header[i].innerHTML = title[i];
+            imageBox[i] = document.createElement("img");
+            if (image[i]!== "NULL")
             {
-                if (xml.readyState == 4 && xml.status == 200)
-                {
-                    process_2(xml.responseText, "a_div"+id[i], id[i], holder);
-                }
+                imageBox.src = image[i];
+                imageBox.className = "article-imagebox"
             }
-            xml.open("GET","/cgi-bin/posts.cgi?request=get_image&id="+id[i],true);
-            xml.send();
+            else
+            {
+                // label this image box to not be included <-- image without src shouldnt add anything I guess
+            }
+            articleText[i] = document.createElement("p");
+            articleText[i].innerHTML = article[i];
+            articleText[i].className = "article-text";
+            footer[i] = document.createElement("div");
+            footer[i].innerHTML = "Published on "+published +" by "+author[i];
+            footer[i].className = "article-footer";
+            
+            articleHolder[i].appendChild(header[i]);
+            articleHolder[i].appendChild(imageBox[i]);
+            articleHolder[i].appendChild(articleText[i]);
+            articleHolder[i].appendChild(footer[i]);
+            articleParentDiv.appendChild(articleHolder[i]);
         }
+        
+    }
 }
-
-
 function textScroll(text, widget, speed) // want to create a server script that creates *endofline* between news lines
 {
     if (document.getElementById(widget)!=null)
@@ -180,5 +189,13 @@ function resizeDiv(parentDiv)
         {
             parentD.style.height = headerH + paraH +"px";
         }
+    }
+}
+
+init_request.open("GET", "/cgi-bin/posts.cgi?request=get_article", true);
+init_request.onreadystatechange = function () {
+    if (init_request.readyState == 4 && init_request.status == 200)
+    {
+        process(init_request.responseText);
     }
 }

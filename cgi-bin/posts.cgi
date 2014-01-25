@@ -13,7 +13,7 @@ my $DBNAME = "";
 my $DBUNAME = "";
 my $DBPASS = "";
 my $DBHOST = "";
-my $TNAME_POSTS = "posts";   #table name for db containing hashes
+my $TNAME_POSTS = "posts";   #table name for db containing posts
 my $DOCUMENT_ROOT = "";
 
 
@@ -193,6 +193,44 @@ sub get_image ## get_image(ID) -> returns a string containing the src of an imag
     }
 }
 
+sub get_articles
+{
+    my ($date, $count) =($_[0],0);
+    my ($day,$month,$year) = (gmtime($date))[3,4,5];
+    $month++;
+    $year = $year+1900;
+    my $sql_date = "$year-$month-$day";
+    my $query_string = "SELECT * FROM $TNAME_POSTS WHERE published < \'$sql_date\' ORDER BY published DESC LIMIT 5";
+    my $dbh = DBI->connect("DBI:mysql:database=$DBNAME;host=$DBHOST", $DBUNAME , $DBPASS, {'RaiseError' => 1});
+    my $query = $dbh->prepare($query_string);
+    my $q = CGI->new;
+    print $q->header(-type=>'text/plain');
+    
+    $query->execute();
+    if ($query->rows == 0)
+    {
+        print "NULL";
+        die "No articles found before $date, stopped";
+    }
+    else
+    {
+        my ($i,$x)= (0,0);
+        my (@table_output, @data);
+        while (@table_output = $query->fetchrow_array())
+        {
+            $data[$i]="$table_output[0]\:\:$table_output[1]\:\:$table_output[2]\:\:$table_output[3]\:\:$table_output[4]\:\:$table_output[5]";
+            $i++;
+        }
+        my $retstring = "$i";
+        while ($x < $i)
+        {
+            $retstring="$retstring\:\:$data[$x]";
+            $x++;
+        }
+        print "$retstring";
+    }
+}
+
 ##### END SUBS ###
 
 my $query = CGI->new;
@@ -234,6 +272,19 @@ elsif ($reqfunct =~ /get_image/)
 {
     my $id = $query->param('id');
     get_image($id);
+}
+
+elsif($reqfunct =~ /get_articles/)
+{
+    if (defined($query->param('date')))
+    {
+        my $date = $query->param('date');
+        get_articles($date);
+    }
+    else
+    {
+        get_articles(time);
+    }
 }
 
 else

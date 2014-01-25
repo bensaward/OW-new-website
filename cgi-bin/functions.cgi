@@ -39,7 +39,7 @@ my $DBPASS = "";
 my $DBHOST = "";
 my $TNAME_PW = "login";  #table name for users and password hashes
 my $WEBADDRESS = "";
-
+my $DOCUMENT_ROOT = "";
 ### ENG CFG ###
 
 ### SUBS ###

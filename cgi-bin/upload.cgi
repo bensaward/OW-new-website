@@ -227,6 +227,7 @@ sub add_content ## add_content(title, date, author, content, image_src, filehand
     }
 }
 
+
 ### END SUBS ###
 
 my $query = CGI->new;

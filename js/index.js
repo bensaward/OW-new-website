@@ -11,14 +11,11 @@
 
 // global vars
 
-var center_div = document.getElementById("content");
-var init_request = new XMLHttpRequest;
-var GlobalExpandLinkCount = 0;
 
 // functions
-function proccess(responseText) // cgi-bin outputs table format in top of the file
+function process(responseText) // cgi-bin outputs table format in top of the file
 {
-    if (responseText == "NULL")
+    if (responseText == "NULL" || responseText.search("::") == -1)
     {
         console.log("[Error] - no posts found in the database");
     }
@@ -62,6 +59,7 @@ function proccess(responseText) // cgi-bin outputs table format in top of the fi
         {
             articleHolder[i] = document.createElement("div");
             articleHolder[i].id = "articleID_"+id[i];
+            articleHolder[i].className = "article"
             header[i] = document.createElement("h2");
             header[i].className = "article-header";
             header[i].innerHTML = title[i];
@@ -87,6 +85,7 @@ function proccess(responseText) // cgi-bin outputs table format in top of the fi
             articleHolder[i].appendChild(articleText[i]);
             articleHolder[i].appendChild(footer[i]);
             articleParentDiv.appendChild(articleHolder[i]);
+            
         }
         
     }
@@ -192,10 +191,25 @@ function resizeDiv(parentDiv)
     }
 }
 
-init_request.open("GET", "/cgi-bin/posts.cgi?request=get_article", true);
-init_request.onreadystatechange = function () {
+console.log("script exec'd");
+init_request = new XMLHttpRequest;
+init_request.open("GET", "/cgi-bin/posts.cgi?request=get_articles", true);
+init_request.onreadystatechange = function ()
+{
     if (init_request.readyState == 4 && init_request.status == 200)
     {
         process(init_request.responseText);
     }
 }
+init_request.send();
+var news = new XMLHttpRequest;
+news.open("GET","/cgi-bin/get_news.cgi",true);
+news.onreadystatechange=function()
+{
+    if (news.readyState == 4 && news.status == 200)
+    {
+        var text = news.responseText;
+        textScroll(text, "fixed-content", 1);
+    }
+}  
+news.send();

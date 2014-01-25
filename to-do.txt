@@ -1,9 +1,0 @@
-1) Provide a more effecient JS function to draw DEM rounded rectangles. (check if it works now) [done... remove the border*.js] {done}
-2) Get this layout to be checked with JD, Harry, etc.
-3) Send out an email to the mail-list asking where all the pictures are at... (maybe best to ask Hazard)
-4) link the twitter/facebook feed into the main page. (CHECK FB/TWITTER API?!?!?!)
-
-
-
-?) add form to allow players to create own player profile (is this something that can be abused easily?)
-            |   what if the form emailed it to oxforduniultimate email or otherwise?

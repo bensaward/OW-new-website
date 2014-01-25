@@ -180,7 +180,7 @@ sub get_image ## get_image(ID) -> returns a string containing the src of an imag
     if ($dbq->rows == 0)
     {
         print "article not found";
-        die "incorrect id of article, stopped";
+        exit 1;
     }
     else
     {
@@ -210,7 +210,7 @@ sub get_articles
     if ($query->rows == 0)
     {
         print "NULL";
-        die "No articles found before $date, stopped";
+        exit 1;
     }
     else
     {
@@ -258,7 +258,7 @@ elsif ($reqfunct =~ /delete_post/)
     else
     {
         print "error, you do not have permission to do that";
-        die "Could not delete post id=$id, session=$session is not authenticated. Stopped";
+        exit 1; 
     }
 }
 

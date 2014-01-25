@@ -18,7 +18,7 @@
 ###     id int not null auto_increment,                             ##
 ###     user varchar(50) not null,                                  ##
 ###     hash varchar(64) not null,                                  ##
-###     primary key(id),                                            ##
+###     primary key(id)                                             ##
 ###     );                                                          ##
 ######################################################################
 
@@ -159,7 +159,7 @@ if ($reqfunct =~ /snonce/)
     snonce($session);
 }
 
-if ($reqfunct =~ /login/)
+elsif ($reqfunct =~ /login/)
 {
     my $user = $query->param('user');
     my $session = $query->param('session');
@@ -171,7 +171,7 @@ if ($reqfunct =~ /login/)
 else
 {
     print $query->header(-type=>'text/html',);
-    print<< "EOF";
+    print<< " EOF";
     <html>
     <head>
         <title>Error</title>
@@ -181,5 +181,6 @@ else
         <p>There was an error in your request</p>
     </body>
     </html>
-EOF
+ EOF
+
 }
